@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-v5-blue.svg)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-v5-purple.svg)](https://vitejs.dev/)
 [![PWA](https://img.shields.io/badge/PWA-Ready-blue.svg)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
-[![Version](https://img.shields.io/badge/Version-0.9.0-blue.svg)](https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite)
+[![Version](https://img.shields.io/badge/Version-0.9.0-blue.svg)](https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite-v2)
 
 An enterprise-grade, **"Local-First"** Single Page Application (SPA) refactored to **React, Vite, and TypeScript**. This suite provides specialized calculators, inventory management, and operational tracking tools that persist data directly in the browser's IndexedDB, ensuring 100% uptime without backend dependencies.
 
@@ -25,8 +25,8 @@ An enterprise-grade, **"Local-First"** Single Page Application (SPA) refactored 
 ### 1) Clone & Install
 
 ```bash
-git clone https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite.git
-cd EECOL-Wire-Tools-Suite
+git clone https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite-v2.git
+cd EECOL-Wire-Tools-Suite-v2
 npm install
 ```
 
@@ -53,14 +53,14 @@ npm run dev
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite.git
-cd EECOL-Wire-Tools-Suite
+git clone https://github.com/wireworks-operations/EECOL-Wire-Tools-Suite-v2.git
+cd EECOL-Wire-Tools-Suite-v2
 
 # 2. Install dependencies and start the app
 npm install && npm run dev
 
 # 3. Open app
-# http://localhost:5173/EECOL-Wire-Tools-Suite/
+# http://localhost:5173/EECOL-Wire-Tools-Suite-v2/
 ```
 
 ---

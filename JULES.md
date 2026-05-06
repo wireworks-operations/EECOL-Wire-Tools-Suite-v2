@@ -114,7 +114,7 @@ critical patterns for the EECOL Wire Tools Suite.
   repository root to ensure the Service Worker scope covers the entire
   application, which is mandatory for PWA installability in major browsers.
 - **GitHub Pages Compatibility:** Since the app is hosted in a subdirectory
-  (`/EECOL-Wire-Tools-Suite/`), all resource paths within the manifest and
+  (`/EECOL-Wire-Tools-Suite-v2/`), all resource paths within the manifest and
   service worker must be **relative** (e.g., `src/assets/icons/...`) rather
   than absolute (`/src/assets/...`).
 - **Service Worker Registration:** Use relative paths (e.g., `../../../sw.js`

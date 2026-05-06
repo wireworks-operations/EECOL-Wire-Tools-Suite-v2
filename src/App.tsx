@@ -23,7 +23,7 @@ import UsefulTool from './pages/UsefulTool';
 
 function App() {
   return (
-    <Router basename="/EECOL-Wire-Tools-Suite">
+    <Router basename="/EECOL-Wire-Tools-Suite-v2">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />

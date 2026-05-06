@@ -29,5 +29,5 @@ export default defineConfig({
       }
     })
   ],
-  base: '/EECOL-Wire-Tools-Suite/',
+  base: '/EECOL-Wire-Tools-Suite-v2/',
 })
