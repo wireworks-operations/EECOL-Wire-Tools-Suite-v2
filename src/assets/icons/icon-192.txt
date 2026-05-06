@@ -1,0 +1,4 @@
+Placeholder for 192x192 PNG icon.
+Create using online tools like favicon.io or image editors.
+Use EECOL blue color scheme.
+This ensures manifest.json doesn't 404.

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'">
+    <title>Database Config - EECOL Wire Tools Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../assets/css/eecol-theme.css">
+    <link rel="manifest" href="../../../manifest.json">
+    <meta name="theme-color" content="#0058B3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EECOL Tools">
+    <link rel="apple-touch-icon" href="../../../src/assets/icons/icon-192x192.png">
+    <script src="../../utils/theme-loader.js"></script>
+    <script src="../../core/database/indexeddb.js"></script>
+    <script src="../../utils/modals.js"></script>
+    <script src="../../utils/mobile-menu.js"></script>
+</head>
+
+<body class="p-3 sm:p-6 h-screen flex flex-col eecol-blue-bg">
+
+    <!-- Main Container -->
+    <div
+        class="flex-1 w-full max-w-md md:max-w-xl lg:max-w-7xl xl:max-w-9xl bg-white p-4 sm:p-6 rounded-xl shadow-2xl mx-auto border-2 border-solid border-[#0058B3] overflow-hidden flex flex-col mb-16 relative">
+
+        <!-- Header -->
+        <div class="flex justify-center mb-1 relative">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="text-[#0058B3] drop-shadow-lg eecol-logo-tilt">
+                <circle cx="12" cy="12" r="11.35" fill="white" stroke="currentColor" stroke-width="2" />
+                <rect x="4" y="4" width="4" height="16" rx="1" fill="currentColor" />
+                <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="currentColor" stroke-width="3.5"
+                    stroke-linecap="round" />
+                <path d="M 8,12 C 12,11 16,13 20,12" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" />
+                <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="currentColor" stroke-width="3.5"
+                    stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <h1 class="text-3xl font-black mb-3 text-center header-gradient">
+            Database Configuration
+        </h1>
+        <p class="mb-4 text-center text-sm font-medium text-[#0058B3]">
+            Manage your local application data.
+        </p>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+
+            <!-- Database Statistics Dashboard -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 card-border-blue mb-6">
+                <h2 class="text-xl font-bold text-[#0058B3] mb-4 flex items-center">
+                    📊 Database Statistics Dashboard
+                </h2>
+
+                <!-- Statistics Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <!-- Total Records -->
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-blue-600">Total Records</p>
+                                <p class="text-2xl font-bold text-blue-800" id="totalRecords">0</p>
+                            </div>
+                            <div class="text-3xl text-blue-500">📋</div>
+                        </div>
+                    </div>
+
+                    <!-- Storage Used -->
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-green-600">Est. Storage</p>
+                                <p class="text-2xl font-bold text-green-800" id="storageUsed">0 KB</p>
+                            </div>
+                            <div class="text-3xl text-green-500">💾</div>
+                        </div>
+                    </div>
+
+                    <!-- Database Health -->
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-purple-600">Database Status</p>
+                                <p class="text-lg font-bold text-purple-800" id="dbStatus">Healthy</p>
+                            </div>
+                            <div class="text-3xl text-purple-500">✅</div>
+                        </div>
+                    </div>
+
+                    <!-- Last Backup -->
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg border border-orange-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-orange-600">Last Activity</p>
+                                <p class="text-sm font-bold text-orange-800" id="lastActivity">Never</p>
+                            </div>
+                            <div class="text-3xl text-orange-500">🕒</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Statistics -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Record Breakdown -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-3">📈 Record Breakdown</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Mark Calculator:</span>
+                                <span class="font-semibold text-[#0058B3]" id="markRecords">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Stop Mark Calculator:</span>
+                                <span class="font-semibold text-[#0058B3]" id="stopmarkRecords">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Reel Configurations:</span>
+                                <span class="font-semibold text-[#0058B3]" id="reelRecords">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Cutting Records:</span>
+                                <span class="font-semibold text-[#0058B3]" id="cuttingRecords">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Inventory Records:</span>
+                                <span class="font-semibold text-[#0058B3]" id="inventoryRecords">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Wire Cut List:</span>
+                                <span class="font-semibold text-[#0058B3]" id="wireCutListRecords">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Storage Analysis -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-3">💽 Storage Analysis</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Database Size:</span>
+                                <span class="font-semibold text-[#0058B3]" id="dbSize">Calculating...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Avg Record Size:</span>
+                                <span class="font-semibold text-[#0058B3]" id="avgRecordSize">Calculating...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Largest Store:</span>
+                                <span class="font-semibold text-[#0058B3]" id="largestStore">Calculating...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Summary -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-3">⚡ Recent Activity</h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Records Added (24h):</span>
+                                <span class="font-semibold text-[#0058B3]" id="recordsAdded24h">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Records Modified (24h):</span>
+                                <span class="font-semibold text-[#0058B3]" id="recordsModified24h">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Backups Created:</span>
+                                <span class="font-semibold text-[#0058B3]" id="backupsCreated">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Database Actions -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 card-border-blue mb-6">
+                <h2 class="text-xl font-bold text-[#0058B3] mb-4">Database Management</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button id="exportDbBtn"
+                        class="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600">Export
+                        to JSON</button>
+                    <button id="importDbBtn"
+                        class="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600">Import
+                        from JSON</button>
+                    <button id="deleteDbBtn"
+                        class="px-4 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600">Delete
+                        Database</button>
+                    <input type="file" id="importFileInput" class="hidden" accept=".json">
+                </div>
+            </div>
+
+            <!-- Record Management -->
+            <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 card-border-blue">
+                <h2 class="text-xl font-bold text-[#0058B3] mb-4">Record Management</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- Mark Converter -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-2">Mark Calculator Records</h3>
+
+                        <!-- Search and Filter Controls -->
+                        <div class="mb-3 p-3 bg-gray-50 rounded-lg border">
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center space-x-2 opacity-0 pointer-events-none">
+                                    <input type="text" placeholder="Placeholder..."
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm flex-1">
+                                    <button
+                                        class="px-2 py-1 bg-blue-500 text-white text-sm rounded">Placeholder</button>
+                                </div>
+                                <input type="text" id="markSearchInput" placeholder="Search records..."
+                                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full">
+                                <div class="flex space-x-2">
+                                    <select id="markSortSelect"
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="startAsc">Start Mark ↑</option>
+                                        <option value="startDesc">Start Mark ↓</option>
+                                    </select>
+                                    <button id="markClearSearch"
+                                        class="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="markConverterList" class="h-64 overflow-y-auto border border-gray-300 rounded-lg p-2">
+                        </div>
+
+                        <!-- Bulk Operations Controls -->
+                        <div class="mt-3 flex flex-col space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="selectAllMarkConverter"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <label for="selectAllMarkConverter" class="text-sm font-medium text-gray-700">Select
+                                    All</label>
+                                <span id="selectedCountMark" class="text-xs text-gray-500">(0 selected)</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="deleteSelectedMarkConverter"
+                                    class="flex-1 px-3 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Delete
+                                    Selected</button>
+                                <button id="exportSelectedMarkConverter"
+                                    class="flex-1 px-3 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Export
+                                    Selected</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stop Mark Converter -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-2">Stop Mark Calculator Records</h3>
+
+                        <!-- Search and Filter Controls -->
+                        <div class="mb-3 p-3 bg-gray-50 rounded-lg border">
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center space-x-2 opacity-0 pointer-events-none">
+                                    <input type="text" placeholder="Placeholder..."
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm flex-1">
+                                    <button
+                                        class="px-2 py-1 bg-blue-500 text-white text-sm rounded">Placeholder</button>
+                                </div>
+                                <input type="text" id="stopmarkSearchInput" placeholder="Search records..."
+                                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full">
+                                <div class="flex space-x-2">
+                                    <select id="stopmarkSortSelect"
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="startAsc">Start Mark ↑</option>
+                                        <option value="startDesc">Start Mark ↓</option>
+                                        <option value="lengthAsc">Cut Length ↑</option>
+                                        <option value="lengthDesc">Cut Length ↓</option>
+                                    </select>
+                                    <button id="stopmarkClearSearch"
+                                        class="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="stopmarkConverterList"
+                            class="h-64 overflow-y-auto border border-gray-300 rounded-lg p-2"></div>
+
+                        <!-- Bulk Operations Controls -->
+                        <div class="mt-3 flex flex-col space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="selectAllStopmarkConverter"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <label for="selectAllStopmarkConverter" class="text-sm font-medium text-gray-700">Select
+                                    All</label>
+                                <span id="selectedCountStopmark" class="text-xs text-gray-500">(0 selected)</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="deleteSelectedStopmarkConverter"
+                                    class="flex-1 px-3 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Delete
+                                    Selected</button>
+                                <button id="exportSelectedStopmarkConverter"
+                                    class="flex-1 px-3 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Export
+                                    Selected</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wire Cut List Records -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-2">Wire Cut List Records</h3>
+
+                        <!-- Search and Filter Controls -->
+                        <div class="mb-3 p-3 bg-gray-50 rounded-lg border">
+                            <div class="flex flex-col space-y-2">
+                                <input type="text" id="wireCutSearchInput" placeholder="Search records..."
+                                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full">
+                                <div class="flex space-x-2">
+                                    <select id="wireCutSortSelect"
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="orderAsc">Order # ↑</option>
+                                        <option value="orderDesc">Order # ↓</option>
+                                    </select>
+                                    <button id="wireCutClearSearch"
+                                        class="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="wireCutListList" class="h-64 overflow-y-auto border border-gray-300 rounded-lg p-2">
+                        </div>
+
+                        <!-- Bulk Operations Controls -->
+                        <div class="mt-3 flex flex-col space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="selectAllWireCutList"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <label for="selectAllWireCutList" class="text-sm font-medium text-gray-700">Select
+                                    All</label>
+                                <span id="selectedCountWireCutList" class="text-xs text-gray-500">(0 selected)</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="deleteSelectedWireCutList"
+                                    class="flex-1 px-3 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Delete
+                                    Selected</button>
+                                <button id="exportSelectedWireCutList"
+                                    class="flex-1 px-3 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Export
+                                    Selected</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reel Capacity Estimator -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-[#0058B3] mb-2">Reel Configurations</h3>
+
+                        <!-- Search and Filter Controls -->
+                        <div class="mb-3 p-3 bg-gray-50 rounded-lg border">
+                            <div class="flex flex-col space-y-2">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" id="newCategoryInput" placeholder="Add new category..."
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm flex-1">
+                                    <button id="addCategoryBtn"
+                                        class="px-2 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">Add
+                                        Category</button>
+                                </div>
+                                <input type="text" id="reelSearchInput" placeholder="Search configurations..."
+                                    class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full">
+                                <div class="flex space-x-2 items-center">
+                                    <select id="reelSortSelect"
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                        <option value="newest">Newest First</option>
+                                        <option value="oldest">Oldest First</option>
+                                        <option value="flangeAsc">Flange ↑</option>
+                                        <option value="flangeDesc">Flange ↓</option>
+                                        <option value="coreAsc">Core ↑</option>
+                                        <option value="coreDesc">Core ↓</option>
+                                    </select>
+                                    <select id="reelCategoryFilter"
+                                        class="px-2 py-1 border border-gray-300 rounded text-sm">
+                                        <option value="">All Categories</option>
+                                        <option value="copper">Copper</option>
+                                        <option value="aluminum">Aluminum</option>
+                                        <option value="steel">Steel</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                    <button id="reelClearSearch"
+                                        class="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="reelcapacityEstimatorList"
+                            class="h-64 overflow-y-auto border border-gray-300 rounded-lg p-2"></div>
+
+                        <!-- Bulk Operations Controls -->
+                        <div class="mt-3 flex flex-col space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="selectAllReelcapacityEstimator"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <label for="selectAllReelcapacityEstimator"
+                                    class="text-sm font-medium text-gray-700">Select All</label>
+                                <span id="selectedCountReel" class="text-xs text-gray-500">(0 selected)</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="deleteSelectedReelcapacityEstimator"
+                                    class="flex-1 px-3 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md hover:bg-red-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Delete
+                                    Selected</button>
+                                <button id="exportSelectedReelcapacityEstimator"
+                                    class="flex-1 px-3 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md hover:bg-green-600 text-sm disabled:opacity-50 disabled:cursor-not-allowed">Export
+                                    Selected</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer inside main box -->
+        <div class="mt-auto pt-4 border-t border-blue-200 hidden sm:block">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex space-x-3">
+                    <a href="../index/index.html"
+                        class="px-3 py-1.5 bg-blue-600 border-2 border-blue-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50 text-xs no-underline">🏠
+                        Home</a>
+                    <a id="usefulBtnInside" href="../useful-tool/useful-tool.html"
+                        class="px-3 py-1.5 bg-sky-500 border-2 border-sky-500 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-sky-600 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-sky-500 focus:ring-opacity-50 text-xs no-underline">
+                        Is This Tool Useful?
+                    </a>
+                    <a href="../backup/backup.html"
+                        class="px-3 py-1.5 bg-green-500 border-2 border-green-500 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-green-600 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 text-xs no-underline">💾
+                        Backup Guide</a>
+                </div>
+                <p class="text-xs text-gray-500 font-mono select-none">v0.8.0.4</p>
+            </div>
+            <p class="font-medium text-[#0058B3] text-center select-none mb-1">
+                Made With ❤️ By: Lucas and Cline 🤖
+            </p>
+            <p class="text-xs font-semibold header-gradient text-center select-none">
+                EECOL Wire Tools 2025 - Enterprise Edition
+            </p>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts/Confirmations -->
+    <div id="customModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" id="modalBackdrop"></div>
+        <div class="relative bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 border-2 border-[#0058B3] transform scale-95 opacity-0 transition-all duration-200 ease-out"
+            id="modalContent">
+            <div class="flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="eecol-logo-tilt">
+                    <defs>
+                        <linearGradient id="modalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#0058B3;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#004a99;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="11.35" fill="white" stroke="url(#modalGradient)" stroke-width="2" />
+                    <rect x="4" y="4" width="4" height="16" rx="1" fill="url(#modalGradient)" />
+                    <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                    <path d="M 8,12 C 12,11 16,13 20,12" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                    <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-center mb-3 header-gradient" id="modalTitle">Notification</h3>
+            <div class="text-sm text-gray-700 mb-6 whitespace-pre-line text-center" id="modalMessage">Message here...
+            </div>
+            <div class="flex justify-center space-x-3" id="modalButtons">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/database-config.js"></script>
+    <script src="../../utils/dark-mode.js"></script>
+</body>
+
+</html>

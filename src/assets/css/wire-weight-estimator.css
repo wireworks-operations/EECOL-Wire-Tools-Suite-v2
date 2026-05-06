@@ -1,0 +1,55 @@
+/* ===== TOOL-SPECIFIC STYLES FOR WIRE WEIGHT ESTIMATOR ===== */
+
+/* Tool-specific content scroll area */
+.scroll-content-area {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 1rem; /* Add padding to prevent content cutoff */
+}
+
+/* Mobile responsiveness enhancements */
+@media (max-width: 640px) {
+    /* Stack form fields vertically on mobile */
+    .mobile-form-stack {
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    /* Touch-friendly input sizing (prevent zoom on iOS) */
+    .mobile-touch-input {
+        font-size: 16px !important;
+        min-height: 44px !important;
+        padding: 0.75rem !important;
+    }
+
+    /* Stack buttons vertically on mobile */
+    .mobile-button-stack {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100%;
+    }
+    .mobile-button-stack button {
+        width: 100% !important;
+        min-height: 44px !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    /* Compact dropdowns on mobile */
+    select {
+        min-height: 44px !important;
+        font-size: 16px !important;
+    }
+
+    /* Better spacing for mobile forms */
+    .space-y-4 > * + * {
+        margin-top: 0.75rem !important;
+    }
+}
+
+/* Additional touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device specific enhancements */
+    button, input, select {
+        min-height: 44px !important;
+    }
+}
