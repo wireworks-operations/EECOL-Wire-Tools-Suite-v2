@@ -9,8 +9,7 @@ const DatabaseConfig: React.FC = () => {
     if (isReady && db) {
       const stores = [
         'cuttingRecords', 'inventoryRecords', 'maintenanceLogs',
-        'wireCutList', 'markConverter', 'stopmarkConverter',
-        'reelcapacityEstimator', 'reelsizeEstimator', 'multicutPlanner'
+        'wireCutList', 'markConverter', 'stopmarkConverter'
       ];
       const counts: Record<string, number> = {};
       Promise.all(stores.map(s => db.getAll(s).then(r => counts[s] = r.length))).then(() => setStats({...counts}));
@@ -19,17 +18,9 @@ const DatabaseConfig: React.FC = () => {
 
   const handleExport = async () => {
     if (!db) return;
-    const allData: any = {
-      version: '0.9.0',
-      timestamp: Date.now()
-    };
-    const stores = [
-      'cuttingRecords', 'inventoryRecords', 'maintenanceLogs',
-      'wireCutList', 'settings', 'markConverter', 'stopmarkConverter',
-      'reelcapacityEstimator', 'reelsizeEstimator', 'multicutPlanner'
-    ];
+    const allData: any = { version: '0.9.0', timestamp: Date.now() };
+    const stores = ['cuttingRecords', 'inventoryRecords', 'maintenanceLogs', 'wireCutList', 'settings', 'markConverter', 'stopmarkConverter'];
     for (const s of stores) { allData[s] = await db.getAll(s); }
-
     const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -48,49 +39,63 @@ const DatabaseConfig: React.FC = () => {
         if (confirm('Import data? This will merge with existing records.')) {
           for (const store in data) {
             if (Array.isArray(data[store])) {
-              for (const item of data[store]) {
-                await db.put(store, item);
-              }
+              for (const item of data[store]) { await db.put(store, item); }
             }
           }
           alert('Import successful!');
           window.location.reload();
         }
-      } catch (err) {
-        alert('Invalid backup file.');
-      }
+      } catch (err) { alert('Invalid backup file.'); }
     };
     reader.readAsText(file);
   };
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 animate-entrance pb-24 text-left">
-      <h1 className="text-3xl font-black header-gradient text-center mb-8 uppercase">Database Configuration</h1>
+    <div className="flex-1 overflow-y-auto p-2 animate-entrance pb-24 text-left">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="text-center">
+          <h1 className="text-4xl font-black header-gradient uppercase tracking-tighter">Database Configuration</h1>
+          <p className="text-sm font-bold text-eecol-blue mt-1">Manage your local application data.</p>
+        </div>
 
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-eecol-blue/10">
-          <h2 className="text-lg font-bold text-eecol-blue dark:text-blue-300 mb-4 uppercase">System Health</h2>
-          <div className="grid grid-cols-2 gap-4">
-             {Object.entries(stats).map(([store, count]) => (
-               <div key={store} className="p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-slate-600">
-                  <p className="text-[10px] font-bold text-gray-500 uppercase">{store}</p>
-                  <p className="text-lg font-black text-eecol-blue dark:text-white">{count} Records</p>
-               </div>
-             ))}
+        <div className="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] shadow-xl border border-eecol-blue/10">
+          <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+            <span>📊</span> Database Statistics Dashboard
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+             <div className="p-4 bg-blue-50 rounded-3xl border border-blue-100 text-center">
+                <p className="text-[8px] font-black text-blue-700 uppercase mb-1">Total Records</p>
+                <p className="text-2xl font-black text-eecol-blue">{Object.values(stats).reduce((a, b) => a + b, 0)}</p>
+             </div>
+             <div className="p-4 bg-emerald-50 rounded-3xl border border-emerald-100 text-center">
+                <p className="text-[8px] font-black text-emerald-700 uppercase mb-1">Database Status</p>
+                <p className="text-sm font-black text-emerald-800">HEALTHY ✅</p>
+             </div>
+          </div>
+
+          <div className="mt-8">
+            <h3 className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-4">Record Breakdown</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+               {Object.entries(stats).map(([store, count]) => (
+                 <div key={store} className="flex justify-between items-center p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <span className="text-[10px] font-black text-slate-500 uppercase">{store.replace(/([A-Z])/g, ' $1')}</span>
+                    <span className="text-sm font-black text-slate-800">{count}</span>
+                 </div>
+               ))}
+            </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-eecol-blue/10">
-          <h2 className="text-lg font-bold text-eecol-blue dark:text-blue-300 mb-4 uppercase">Maintenance & Backup</h2>
-          <div className="flex flex-col gap-3">
-             <button onClick={handleExport} className="w-full bg-eecol-blue text-white font-bold py-3 rounded-xl btn-tactile uppercase">Generate Full JSON Backup</button>
-
-             <label className="w-full bg-emerald-600 text-white font-bold py-3 rounded-xl btn-tactile uppercase text-center cursor-pointer">
-                Import JSON Backup
+        <div className="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] shadow-xl border border-eecol-blue/10">
+          <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-6">Database Management</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+             <button onClick={handleExport} className="bg-eecol-blue text-white font-black py-4 rounded-2xl btn-tactile uppercase text-xs shadow-lg">Export to JSON</button>
+             <label className="bg-emerald-600 text-white font-black py-4 rounded-2xl btn-tactile uppercase text-xs text-center cursor-pointer shadow-lg">
+                Import from JSON
                 <input type="file" accept=".json" onChange={handleImport} className="hidden" />
              </label>
-
-             <button onClick={async () => {if(confirm('Nuclear Option: Clear ALL data?')){ localStorage.clear(); indexedDB.deleteDatabase('EECOLTools_v2'); window.location.reload(); }}} className="w-full bg-red-600 text-white font-bold py-3 rounded-xl btn-tactile uppercase">Factory Reset (Delete All)</button>
+             <button onClick={async () => {if(confirm('Delete ALL data?')){ localStorage.clear(); indexedDB.deleteDatabase('EECOLTools_v2'); window.location.reload(); }}} className="bg-red-600 text-white font-black py-4 rounded-2xl btn-tactile uppercase text-xs shadow-lg">Delete Database</button>
           </div>
         </div>
       </div>
