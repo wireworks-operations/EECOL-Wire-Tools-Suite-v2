@@ -1,166 +1,175 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useDatabase } from '../../hooks/useDatabase';
 import { InventoryRecord } from '../../types/database';
-import { calculateInventoryStats, filterInventoryItems } from './utils/logic';
 import InventoryItem from './components/InventoryItem';
 import InventoryStats from './components/InventoryStats';
+import { calculateInventoryStats } from './utils/logic';
 
 const InventoryRecords: React.FC = () => {
   const { db, isReady } = useDatabase();
   const [items, setItems] = useState<InventoryRecord[]>([]);
   const [loading, setLoading] = useState(true);
-
-  // UI State
+  const [showDataControls, setShowDataControls] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterField, setFilterField] = useState('all');
-  const [filterDamaged, setFilterDamaged] = useState('all');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [lastJsonExport, setLastJsonExport] = useState<string | null>(null);
 
-  // Form State
+  // Filter state
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<'all' | 'damaged' | 'tailend'>('all');
+
   const [formData, setFormData] = useState<Partial<InventoryRecord>>({
-    personName: '', productCode: '', lineCode: '', currentLength: 0, actualLength: 0,
-    currentLengthUnit: 'm', actualLengthUnit: 'm', reason: '', inventoryDate: new Date().toISOString().split('T')[0],
-    inventoryComments: '', coilCode: '', averageCost: 0, costUnit: '$', totalValue: 0,
-    adjust: false, approved: null, inaNumber: '', inaDate: ''
+    productCode: '', coilCode: '', currentLength: 0, actualLength: 0,
+    lengthUnit: 'm', costPerMeter: 0, lineCode: '', comments: '', reason: '', note: ''
   });
-  const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isReady && db) {
-      loadItems();
-      db.getAll('settings').then((settings: any[]) => {
-        const lastExport = settings.find(s => s.name === 'lastJsonExport');
-        if (lastExport) setLastJsonExport(lastExport.value);
-      });
-    }
+    if (isReady && db) loadItems();
   }, [isReady, db]);
 
   const loadItems = async () => {
     setLoading(true);
-    try {
-      const data = await db!.getAll<InventoryRecord>('inventoryRecords');
-      setItems(data.sort((a, b) => b.timestamp - a.timestamp));
-    } catch (err) { console.error(err); } finally { setLoading(false); }
+    const data = await db!.getAll<InventoryRecord>('inventoryRecords');
+    setItems(data.sort((a, b) => b.timestamp - a.timestamp));
+    setLoading(false);
   };
 
-  const filtered = useMemo(() => filterInventoryItems(items, searchTerm, filterField, filterDamaged, dateFrom, dateTo), [items, searchTerm, filterField, filterDamaged, dateFrom, dateTo]);
-  const stats = useMemo(() => calculateInventoryStats(items), [items]);
-
-  const validate = () => {
-    if (!formData.personName) return "Employee Name is required.";
-    if (!formData.productCode) return "Product Code is required.";
-    if (!formData.lineCode) return "Line # is required.";
-    return null;
-  };
-
-  const handleSave = async () => {
-    const err = validate();
-    if (err) { setError(err); return; }
-    setError(null);
-
+  const handleAddItem = async () => {
+    if (!formData.productCode || !formData.coilCode) {
+      alert('Product Code and Coil Code are required.');
+      return;
+    }
     const item: InventoryRecord = {
       ...formData as InventoryRecord,
-      id: editingId || crypto.randomUUID(),
-      timestamp: editingId ? items.find(i => i.id === editingId)!.timestamp : Date.now(),
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      createdAt: Date.now(),
       updatedAt: Date.now(),
-      wireType: 'INVENTORY'
+      name: formData.productCode // Mapping for legacy name field
     };
     await db!.put('inventoryRecords', item);
-    setEditingId(null);
-    loadItems();
-    setFormData(prev => ({ ...prev, productCode: '', currentLength: 0, actualLength: 0, reason: '', inventoryComments: '', coilCode: '', inaNumber: '' }));
+    setItems([item, ...items]);
+    setFormData({ productCode: '', coilCode: '', currentLength: 0, actualLength: 0, lengthUnit: 'm', costPerMeter: 0, lineCode: '', comments: '', reason: '', note: '' });
   };
 
+  const filtered = useMemo(() => {
+    return items.filter(item => {
+      const matchesSearch = !searchTerm ||
+        item.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.coilCode.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesType = filterType === 'all' ||
+        (filterType === 'damaged' && item.reason?.toLowerCase().includes('damaged')) ||
+        (filterType === 'tailend' && item.reason?.toLowerCase().includes('tail'));
+
+      return matchesSearch && matchesType;
+    });
+  }, [items, searchTerm, filterType]);
+
+  const stats = useMemo(() => calculateInventoryStats(items), [items]);
+
   return (
-    <div className="flex-1 flex flex-col overflow-hidden animate-entrance p-2">
-      <div className="flex-1 overflow-y-auto max-w-2xl mx-auto w-full pb-24 px-1">
-        <div className="flex justify-center mb-1">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-eecol-blue drop-shadow-lg eecol-logo-tilt">
-            <circle cx="12" cy="12" r="11.35" fill="white" stroke="currentColor" strokeWidth="2" />
-            <rect x="4" y="4" width="4" height="16" rx="1" fill="currentColor" />
-            <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M 8,12 C 12,11 16,13 20,12" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
-          </svg>
+    <div className="flex-1 flex flex-col overflow-hidden animate-entrance p-2 pb-24">
+      <div className="flex-1 overflow-y-auto max-w-2xl mx-auto w-full px-1 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-black header-gradient uppercase tracking-tighter">EECOL Wire Inventory Records</h1>
+          <p className="text-sm font-bold text-eecol-blue mt-1 uppercase">Track and manage wire inventory pieces efficiently.</p>
         </div>
 
-        <h1 className="text-3xl font-black text-center header-gradient mb-1">EECOL Wire Inventory</h1>
-        <p className="mb-5 text-center text-[10px] font-medium header-gradient opacity-80 uppercase tracking-wider">Track and Manage Wire Inventory Pieces</p>
-
-        <div className="p-2 bg-yellow-50/70 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-lg shadow-md mb-4 text-left">
-          <p className="text-[10px] font-bold text-yellow-800 dark:text-yellow-500 uppercase">IndexedDB Mode - Enhanced Data Persistence</p>
-          <p className="text-[10px] font-mono text-gray-700 dark:text-gray-400 break-all">User ID: <span className="font-bold">LocalUser</span></p>
-        </div>
-
-        <div className="p-2 bg-blue-50/70 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-lg shadow-md mb-4 text-left">
-          <p className="text-[10px] font-bold text-blue-800 dark:text-blue-300 uppercase">Last Export</p>
-          <p className="text-[10px] text-gray-700 dark:text-gray-400">JSON Export: <span className="font-bold">{lastJsonExport ? new Date(lastJsonExport).toLocaleDateString() : 'Never exported'}</span></p>
+        <div className="p-3 bg-blue-50/70 dark:bg-blue-900/20 border-l-4 border-blue-500 rounded-2xl shadow-md text-left">
+          <p className="text-[10px] font-black text-blue-800 dark:text-blue-300 uppercase tracking-wider">IndexedDB Mode - Enhanced Data Persistence</p>
+          <p className="text-[10px] font-mono text-gray-700 dark:text-gray-400 mt-1">User ID: <span className="font-bold">LocalUser</span></p>
+          <p className="text-[9px] text-blue-600 dark:text-blue-400 mt-2 font-medium italic">💡 JSON Backup & Import: Use buttons below to save/load complete backups.</p>
         </div>
 
         <InventoryStats stats={stats} isOpen={statsOpen} onToggle={() => setStatsOpen(!statsOpen)} />
 
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg border border-eecol-blue/20 mb-6 space-y-4 text-left">
-           <h3 className="text-lg font-bold text-center header-gradient">Record Inventory Adjustment</h3>
-
-           <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2">
-                 <label className="text-[10px] font-bold header-gradient uppercase">Employee Name</label>
-                 <input value={formData.personName} onChange={e => setFormData({...formData, personName: e.target.value.toUpperCase()})} className="input-premium w-full" placeholder="NAME" />
-              </div>
-              <div>
-                 <label className="text-[10px] font-bold header-gradient uppercase">Product Code</label>
-                 <input value={formData.productCode} onChange={e => setFormData({...formData, productCode: e.target.value.toUpperCase()})} className="input-premium w-full" placeholder="P-CODE" />
-              </div>
-              <div>
-                 <label className="text-[10px] font-bold header-gradient uppercase">Line #</label>
-                 <input value={formData.lineCode} onChange={e => setFormData({...formData, lineCode: e.target.value.toUpperCase()})} className="input-premium w-full" placeholder="L-CODE" />
-              </div>
-              <div className="col-span-2">
-                 <label className="text-[10px] font-bold header-gradient uppercase">Reason</label>
-                 <input value={formData.reason} onChange={e => setFormData({...formData, reason: e.target.value})} className="input-premium w-full" placeholder="DISCREPANCY, DAMAGE, ETC" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold header-gradient uppercase">Current Length</label>
-                <input type="number" value={formData.currentLength || ''} onChange={e => setFormData({...formData, currentLength: Number(e.target.value)})} className="input-premium w-full" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold header-gradient uppercase">Actual Length</label>
-                <input type="number" value={formData.actualLength || ''} onChange={e => setFormData({...formData, actualLength: Number(e.target.value)})} className="input-premium w-full" />
-              </div>
-           </div>
-
-           <button onClick={handleSave} className="w-full bg-eecol-blue text-white font-bold py-3 rounded-xl text-xs btn-tactile uppercase">{editingId ? 'Update Inventory' : 'Add To Inventory'}</button>
-
-           {error && <div className="p-2 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg text-xs font-bold animate-pulse">{error}</div>}
-        </div>
-
-        <div className="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-md border border-gray-100 dark:border-slate-700 mb-6 space-y-3">
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-3xl shadow-xl border border-eecol-blue/10 space-y-4 text-left">
            <div className="flex gap-2">
-              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search product, name..." className="input-premium flex-1" />
-              <select value={filterField} onChange={e => setFilterField(e.target.value)} className="input-premium w-24 bg-white dark:bg-slate-700">
-                 <option value="all">All</option><option value="productCode">Product</option><option value="personName">Name</option>
-              </select>
+              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search records..." className="input-premium flex-1 font-bold" />
+              <button onClick={() => {setSearchTerm(''); setFilterType('all');}} className="bg-blue-600 text-white text-[10px] font-black px-4 rounded-xl btn-tactile uppercase">Clear</button>
            </div>
-           <div className="flex items-center gap-4 px-2">
-              <label className="text-[10px] font-bold text-gray-500 uppercase">Filter:</label>
-              {['all', 'damaged', 'tailends'].map(f => (
-                <label key={f} className="flex items-center gap-1 text-[10px] cursor-pointer">
-                   <input type="radio" name="filterDamaged" value={f} checked={filterDamaged === f} onChange={e => setFilterDamaged(e.target.value)} className="w-3 h-3 text-blue-600" />
-                   <span className="capitalize">{f}</span>
+           <div className="flex gap-4 justify-center">
+              {['all', 'damaged', 'tailend'].map(t => (
+                <label key={t} className="flex items-center gap-2 cursor-pointer">
+                  <input type="radio" name="filterType" checked={filterType === t} onChange={() => setFilterType(t as any)} className="w-4 h-4" />
+                  <span className="text-[10px] font-black uppercase text-gray-500">{t}</span>
                 </label>
               ))}
            </div>
         </div>
 
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-xl border border-eecol-blue/10 space-y-4 text-left">
+          <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-4">Add Inventory Item</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Product Code</label>
+              <input value={formData.productCode} onChange={e => setFormData({...formData, productCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold" placeholder="ACWU90-6-3" />
+            </div>
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Coil Code</label>
+              <input value={formData.coilCode} onChange={e => setFormData({...formData, coilCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold" placeholder="C12345" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Current Length</label>
+              <div className="flex gap-2">
+                <input type="number" value={formData.currentLength} onChange={e => setFormData({...formData, currentLength: Number(e.target.value)})} className="input-premium flex-1 font-bold" />
+                <select value={formData.lengthUnit} onChange={e => setFormData({...formData, lengthUnit: e.target.value as any})} className="input-premium w-20 font-bold bg-white dark:bg-slate-700"><option value="m">m</option><option value="ft">ft</option></select>
+              </div>
+            </div>
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Actual Length</label>
+              <input type="number" value={formData.actualLength} onChange={e => setFormData({...formData, actualLength: Number(e.target.value)})} className="input-premium w-full font-bold" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Reason / Condition</label>
+              <select value={formData.reason} onChange={e => setFormData({...formData, reason: e.target.value})} className="input-premium w-full font-bold bg-white dark:bg-slate-700">
+                <option value="">Select a reason...</option>
+                <option value="Standard">Standard</option>
+                <option value="Damaged">Damaged</option>
+                <option value="Tail End">Tail End</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Line #</label>
+              <input value={formData.lineCode} onChange={e => setFormData({...formData, lineCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold" placeholder="Line Code" />
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-black text-gray-500 uppercase ml-1 mb-1 block">Comments</label>
+            <textarea value={formData.comments} onChange={e => setFormData({...formData, comments: e.target.value})} className="input-premium w-full font-bold h-20" placeholder="Additional details..." />
+          </div>
+
+          <button onClick={handleAddItem} className="w-full bg-eecol-blue text-white font-black py-4 rounded-2xl btn-tactile uppercase shadow-lg text-xs mt-2">
+            Add to Inventory
+          </button>
+        </div>
+
+        <div className="space-y-2">
+          <label className="flex items-center gap-2 mb-2 cursor-pointer ml-1">
+            <input type="checkbox" checked={showDataControls} onChange={e => setShowDataControls(e.target.checked)} className="w-4 h-4 rounded" />
+            <span className="text-[10px] font-black uppercase text-gray-500">Show Data Management Controls</span>
+          </label>
+
+          {showDataControls && (
+            <div className="grid grid-cols-2 gap-2 animate-entrance">
+              <button className="bg-emerald-600 text-white text-[10px] font-black py-3 rounded-xl btn-tactile uppercase shadow-lg shadow-emerald-600/20">Export CSV</button>
+              <button onClick={async () => {if(confirm('Clear all?')){setItems([]); await db!.clear('inventoryRecords');}}} className="bg-red-600 text-white text-[10px] font-black py-3 rounded-xl btn-tactile uppercase shadow-lg shadow-red-600/20">Clear All</button>
+            </div>
+          )}
+        </div>
+
         <div className="space-y-3">
-           <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg text-center text-[10px] font-bold text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-             Total Records: {items.length} | Showing: {filtered.length}
+           <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-2xl text-center text-[10px] font-black text-blue-800 dark:text-blue-300 border border-blue-200 uppercase tracking-widest">
+             Total Items: {items.length} | Showing: {filtered.length}
            </div>
-           {filtered.map(item => <InventoryItem key={item.id} item={item} onEdit={id => {setEditingId(id); setFormData(items.find(i => i.id === id)!)}} onDelete={async id => {if(confirm('Delete this item?')){await db!.delete('inventoryRecords', id); loadItems();}}} />)}
+           {filtered.map(item => <InventoryItem key={item.id} item={item} onEdit={() => {}} onDelete={async id => {setItems(items.filter(i => i.id !== id)); await db!.delete('inventoryRecords', id)}} />)}
         </div>
       </div>
     </div>
