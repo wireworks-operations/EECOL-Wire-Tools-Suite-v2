@@ -1,0 +1,632 @@
+<!--V0.8.0.0
+Knowledgebase Page - Redesigned for Education Center
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="../../../manifest.json">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
+    <title>EECOL Wire Tools - Wire Tools Foundation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../utils/theme-loader.js"></script>
+    <link rel="stylesheet" href="../../../src/assets/css/eecol-theme.css">
+    <style>
+        /* Styling for Documentation Glossary */
+        .glossary dt {
+            font-weight: 700;
+            color: #0058B3;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        .glossary dd {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-white relative">
+<style>
+/* Native App-Style Design */
+.app-container {
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+}
+
+.content-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 88, 179, 0.1);
+}
+
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg,
+    rgba(0, 88, 179, 0.1),
+    rgba(0, 123, 255, 0.1),
+    rgba(0, 88, 179, 0.1)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.content-card:hover .glow-effect::before {
+  opacity: 1;
+}
+
+/* Smooth scrolling and native feel */
+html {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced card styling for app feel */
+.enhanced-article {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(0, 88, 179, 0.02));
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 88, 179, 0.1);
+}
+</style>
+
+    <!-- Header with EECOL Logo -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex items-center justify-center space-x-4">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-[#0058B3] drop-shadow-lg eecol-logo-tilt">
+                    <circle cx="12" cy="12" r="11.35" fill="white" stroke="currentColor" stroke-width="2"/>
+                    <rect x="4" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+                    <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M 8,12 C 12,11 16,13 20,12" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                    <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+                <div class="text-center">
+                    <h1 class="text-3xl font-black header-gradient">EECOL Wire Tools Foundation</h1>
+                    <p class="text-sm font-medium text-[#0058B3] mt-1">Understand wire cutting best practices, reel anatomy, capacity definitions, and advanced estimation methods.</p>
+                </div>
+            </div>
+            <div class="flex justify-center mt-4">
+                <a href="learning-hub.html" class="px-4 py-2 bg-blue-600 border-2 border-blue-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50 text-sm no-underline">
+                    ← Back to Education Center
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Tool Layout Container -->
+        <div class="space-y-8">
+
+            <!-- Modernized Technical Documentation -->
+            <section class="space-y-8">
+
+                <!-- Introduction Overview -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">📋</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Wire Handling Reference Guide</h2>
+                    </div>
+                    <div class="mb-6">
+                        <p class="text-base text-gray-700 mb-4"><strong>Proper wire handling</strong> ensures efficient reel operations, minimizing waste and maximizing safety in cable management processes.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div class="bg-[#F0F8FF] p-4 rounded-lg">
+                            <div class="text-3xl mb-2">📏</div>
+                            <div class="text-lg font-semibold text-[#0058B3]">Accurate Cutting</div>
+                            <div class="text-sm text-gray-600">Mark-based precision protocols</div>
+                        </div>
+                        <div class="bg-[#F0F8FF] p-4 rounded-lg">
+                            <div class="text-3xl mb-2">🔄</div>
+                            <div class="text-lg font-semibold text-[#0058B3]">Reel Anatomy</div>
+                            <div class="text-sm text-gray-600">Understanding dimensional components</div>
+                        </div>
+                        <div class="bg-[#F0F8FF] p-4 rounded-lg">
+                            <div class="text-3xl mb-2">📖</div>
+                            <div class="text-lg font-semibold text-[#0058B3]">Capacity Terms</div>
+                            <div class="text-sm text-gray-600">Glossary of efficiency factors</div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Geometric Modeling Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">📏</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Anatomy of a Wire Reel</h2>
+                    </div>
+
+                    <!-- Reel Diagram -->
+                    <div class="bg-amber-50 p-6 rounded-lg mb-6 flex justify-center">
+                        <!-- Reel Diagram SVG (Duplicate for documentation) -->
+                        <svg width="280" height="170" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Flanges (Outer structure) -->
+                            <rect x="50" y="20" width="10" height="160" fill="#333" />
+                            <rect x="240" y="20" width="10" height="160" fill="#333" />
+                            <!-- Core (Barrel) -->
+                            <rect x="50" y="70" width="200" height="60" fill="#CCC" />
+
+                            <!-- Wire wraps (example layers) -->
+                            <defs>
+                                <pattern id="wirePatternDoc" patternUnits="userSpaceOnUse" width="10" height="10">
+                                    <circle cx="5" cy="5" r="4" fill="#0058B3" />
+                                </pattern>
+                            </defs>
+                            <rect x="55" y="60" width="190" height="10" fill="url(#wirePatternDoc)" />
+                            <rect x="55" y="50" width="190" height="10" fill="url(#wirePatternDoc)" />
+                            <rect x="55" y="40" width="190" height="10" fill="url(#wirePatternDoc)" />
+
+                            <!-- LABELS and DIMENSIONS - Wrapped in <g> with classes for highlighting -->
+
+                            <!-- B: Flange Diameter (Overall Height) -->
+                            <g class="svg-dimension-line highlight-B">
+                                <line x1="20" y1="20" x2="20" y2="180" stroke="#000" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="15" y1="20" x2="25" y2="20" stroke="#000" stroke-width="1"/>
+                                <line x1="15" y1="180" x2="25" y2="180" stroke="#000" stroke-width="1"/>
+                                <text x="5" y="100" font-size="14" font-weight="bold" fill="#000">B</text>
+                            </g>
+
+                            <!-- A: Core/Barrel Diameter (Inner Height) -->
+                            <g class="svg-dimension-line highlight-A">
+                                <line x1="35" y1="70" x2="35" y2="130" stroke="#000" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="30" y1="70" x2="40" y2="70" stroke="#000" stroke-width="1"/>
+                                <line x1="30" y1="130" x2="40" y2="130" stroke="#000" stroke-width="1"/>
+                                <text x="40" y="100" font-size="14" font-weight="bold" fill="#000">A</text>
+                            </g>
+
+                            <!-- C: Traverse Width / Drum Length (Horizontal) -->
+                            <g class="svg-dimension-line highlight-C">
+                                <line x1="50" y1="185" x2="250" y2="185" stroke="#000" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="50" y1="180" x2="50" y2="190" stroke="#000" stroke-width="1"/>
+                                <line x1="250" y1="180" x2="250" y2="190" stroke="#000" stroke-width="1"/>
+                                <text x="145" y="198" font-size="14" font-weight="bold" fill="#000">C</text>
+                            </g>
+
+                            <!-- D: Freeboard (Top Clearance) -->
+                            <g class="svg-dimension-line highlight-D">
+                                <line x1="140" y1="35" x2="140" y2="20" stroke="#D97706" stroke-width="1" stroke-dasharray="5,5"/>
+                                <line x1="135" y1="35" x2="145" y2="35" stroke="#D97706" stroke-width="1"/>
+                                <line x1="135" y1="20" x2="145" y2="20" stroke="#D97706" stroke-width="1"/>
+                                <line x1="50" y1="180" x2="250" y2="20" stroke="#D97706" stroke-width="1" stroke-dasharray="5,5"/>
+                                <text x="150" y="30" font-size="14" font-weight="bold" fill="#D97706">D</text>
+                            </g>
+
+                            <!-- E: Cable Diameter (Wire Diameter) -->
+                            <g class="svg-dimension-line highlight-E">
+                                <line x1="190" y1="50" x2="190" y2="60" stroke="#0058B3" stroke-width="1" stroke-dasharray="2,2"/>
+                                <line x1="185" y1="50" x2="195" y2="50" stroke="#0058B3" stroke-width="1"/>
+                                <line x1="185" y1="60" x2="195" y2="60" stroke="#0058B3" stroke-width="1"/>
+                                <text x="175" y="55" font-size="14" font-weight="bold" fill="#0058B3">E</text>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Dimension Key Points -->
+                    <div class="bg-[#FFF9C4] p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-amber-800 mb-4">📐 Critical Dimensions & Components</h3>
+                        <ul class="text-base space-y-2">
+                            <li><strong>A. Core/Barrel Diameter (D<sub>c</sub>):</strong> Center drum diameter where winding begins</li>
+                            <li><strong>B. Flange Diameter (D<sub>f</sub>):</strong> Total outside diameter of reel ends, determines maximum winding diameter</li>
+                            <li><strong>C. Traverse Width (W):</strong> Distance between flanges (core length), determines layer width</li>
+                            <li><strong>D. Freeboard (F):</strong> Safety clearance between top wire layer and flange</li>
+                            <li><strong>E. Wire/Cable Diameter (d):</strong> Actual cable diameter being spooled</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Materials Science Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">✅</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Wire Cut Consistency Protocol</h2>
+                    </div>
+
+                    <!-- Cutting Protocols -->
+                    <div class="bg-green-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">🎯 Mark-Based Cutting Standards</h3>
+                        <p class="text-base text-gray-700 mb-4">Consistent cutting methodology prevents inventory discrepancies and ensures subsequent users can reliably cut wire.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Scenario 1: Mark at the Tip (Preferred) -->
+                            <div class="bg-white p-4 rounded-lg border-l-4 border-green-600">
+                                <h4 class="font-semibold text-base text-green-700 mb-3">Scenario 1: Mark at the Tip (Preferred Method)</h4>
+                                <div class="mb-4">
+                                    <div class="text-sm font-semibold text-gray-800">Reference: At the Tip</div>
+                                    <div class="text-sm text-gray-600">Mark (e.g., 5m) aligned with machine zero point</div>
+                                </div>
+                                <div class="bg-[#E8F5E8] p-3 rounded text-center border">
+                                    <div class="text-base font-bold text-green-800">Action: Cut BEFORE next digit</div>
+                                    <div class="text-sm text-gray-700 mt-1">Start at 5, cut before 6 mark</div>
+                                </div>
+                            </div>
+
+                            <!-- Scenario 2: Mark 1 Meter In (Alternative Method) -->
+                            <div class="bg-white p-4 rounded-lg border-l-4 border-amber-600">
+                                <h4 class="font-semibold text-base text-amber-700 mb-3">Scenario 2: Mark 1 Meter In (Alternative Method)</h4>
+                                <div class="mb-4">
+                                    <div class="text-sm font-semibold text-gray-800">Reference: 1 Meter In</div>
+                                    <div class="text-sm text-gray-600">Mark located 1m from wire tip</div>
+                                </div>
+                                <div class="bg-[#FFF9C4] p-3 rounded text-center border">
+                                    <div class="text-base font-bold text-amber-800">Action: Cut AFTER current digit</div>
+                                    <div class="text-sm text-gray-700 mt-1">Start at 5, cut after 5 mark</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Guidance -->
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="text-2xl mr-3">📏</div>
+                            <h3 class="text-xl font-semibold text-gray-800">Best Practice Guidelines</h3>
+                        </div>
+                        <ul class="text-base space-y-2">
+                            <li><strong>🏆 Primary Method:</strong> Use "Mark at the Tip" scenario for optimal consistency</li>
+                            <li><strong>🔄 Alternative Usage:</strong> If 1-meter offset is encountered, use wire cut tool's 1-meter offset feature to properly estimate the desired length, as the mark will not be at the tip</li>
+                            <li><strong>⚠️ Critical:</strong> Always base cuts on starting mark position to maintain quality control</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Validation Examples Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">📖</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Reel Capacity Glossary & Terms</h2>
+                    </div>
+
+                    <!-- Efficiency Factors -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-purple-50 p-6 rounded-lg border-l-4 border-purple-400">
+                            <h3 class="text-xl font-semibold text-purple-800 mb-3">⚡ Winding Efficiency Factor (User-Selectable)</h3>
+                            <p class="text-base text-gray-700 mb-3">User-selected correction factor applied to theoretical calculations in the Reel Estimator:</p>
+                            <div class="bg-white p-3 rounded text-center">
+                                <div class="text-base font-semibold text-purple-700">Efficiency Range = 75% - 100%</div>
+                                <div class="text-sm text-gray-600">Default 80% for field conditions</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-400">
+                            <h3 class="text-xl font-semibold text-blue-800 mb-3">🛡️ Safety Factor (80%)</h3>
+                            <p class="text-base text-gray-700 mb-3">Recommended working capacity estimate:</p>
+                            <div class="bg-white p-3 rounded text-center">
+                                <div class="text-base font-semibold text-blue-700">Working Capacity = 80%</div>
+                                <div class="text-sm text-gray-600">Real-world winding allowance</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Capacity Definitions -->
+                    <div class="space-y-6 mb-6">
+                        <div class="bg-[#E8F4FD] p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="text-2xl mr-3">📈</div>
+                                <h3 class="text-xl font-semibold text-blue-800">Capacity Classifications</h3>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-blue-600 font-bold w-6 text-base">★</div>
+                                    <div>
+                                        <div class="text-base font-semibold text-gray-800">Total Drum Storage Capacity</div>
+                                        <div class="text-sm text-gray-600">Maximum theoretical length to flange top minus freeboard (includes 3 dead wraps)</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-blue-600 font-bold w-6 text-base">○</div>
+                                    <div>
+                                        <div class="text-base font-semibold text-gray-800">Total Working Drum Capacity</div>
+                                        <div class="text-sm text-gray-600">Maximum operational length without dead wraps (excludes first 3 dead wraps from layer breakdown)</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="text-blue-600 font-bold w-6 text-base">✓</div>
+                                    <div>
+                                        <div class="text-base font-semibold text-gray-800">Recommended Working Capacity</div>
+                                        <div class="text-sm text-gray-600">80% of working capacity for practical field use</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 p-6 rounded-lg border-l-4 border-amber-400">
+                            <h3 class="text-xl font-semibold text-amber-800 mb-4">🔄 Essential Components</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white p-4 rounded border">
+                                    <div class="text-lg font-bold text-amber-700 mb-2">Dead Wraps</div>
+                                    <div class="text-base mb-3">First 3+ wraps for anchoring cable to reel core</div>
+                                    <div class="text-sm text-gray-600 mb-3">• Provides mechanical stability<br>• Prevents cable slippage during transport<br>• Establishes winding foundation</div>
+                                    <div class="text-sm text-gray-600 bg-amber-50 p-2 rounded">Note: Excluded from working capacity calculations (Reel Estimator accounts for first 3 dead wraps in layer breakdown)</div>
+                                    <div class="text-sm text-gray-600 mt-3">ANSI/ASME B30.7 standard</div>
+                                </div>
+                                <div class="bg-white p-4 rounded border">
+                                    <div class="text-lg font-bold text-amber-700 mb-2">Freeboard</div>
+                                    <div class="text-base mb-3">Safety clearance between top wire layer and reel flange</div>
+                                    <div class="text-sm text-gray-600 mb-3">• Prevents cable contact with flanges<br>• Allows for thermal expansion<br>• Accommodates winding irregularities</div>
+                                    <div class="text-sm text-gray-600 bg-amber-50 p-2 rounded">Note: Automatically calculated in Reel Estimator based on selected safety standard (minimum 0.5 inches per ANSI B30.7)</div>
+                                    <div class="text-sm text-gray-600 mt-3">Reduces total capacity for safety</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">✅ Implementation Essentials</h3>
+                        <ul class="text-base space-y-2">
+                            <li><strong>📏 Measurement:</strong> Always calculate from exact reel dimensions and wire specifications</li>
+                            <li><strong>🛡️ Safety Standards:</strong> Incorporate ANSI/ASME B30.7 freeboard and dead wrap requirements</li>
+                            <li><strong>⚡ Efficiency Selection:</strong> Choose appropriate winding efficiency (75%-100%) based on equipment and conditions</li>
+                            <li><strong>📈 Real-World Usage:</strong> Use 80% of calculated working capacity for practical field operations</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Winding Efficiency Factor Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">⚡</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Winding Efficiency Factor</h2>
+                    </div>
+
+                    <!-- Efficiency Factor Details -->
+                    <div class="bg-indigo-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Understanding Volumetric Packing</h3>
+                        <p class="text-base text-gray-700 mb-4">The winding efficiency factor represents the practical volumetric packing density during cable spooling, accounting for real-world imperfections that prevent perfect hexagonal packing. Users can select their efficiency factor in the Reel Estimator tool.</p>
+                        <div class="bg-white p-3 rounded text-center border">
+                            <div class="text-base font-semibold text-indigo-700">User-Selectable Range = 75% - 100%</div>
+                            <div class="text-sm text-gray-600">Default 80% for standard field conditions</div>
+                        </div>
+                    </div>
+
+                    <!-- Calculation Application -->
+                    <div class="space-y-6 mb-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">How It's Applied</h3>
+                            <ul class="text-base space-y-1">
+                                <li><strong>Theoretical Length:</strong> Calculated assuming perfect packing (no voids)</li>
+                                <li><strong>Practical Length:</strong> Theoretical × Efficiency Factor</li>
+                                <li><strong>Example:</strong> 1000m theoretical becomes 800m at 80%</li>
+                            </ul>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-indigo-100 p-4 rounded-lg border-l-4 border-indigo-500">
+                                <h4 class="text-base font-semibold text-indigo-700 mb-1">100% Efficiency</h4>
+                                <div class="text-sm text-gray-600">Theoretical maximum</div>
+                            </div>
+                            <div class="bg-indigo-100 p-4 rounded-lg border-l-4 border-indigo-500">
+                                <h4 class="text-base font-semibold text-indigo-700 mb-1">95% Efficiency</h4>
+                                <div class="text-sm text-gray-600">Precision level winding</div>
+                            </div>
+                            <div class="bg-indigo-100 p-4 rounded-lg border-l-4 border-indigo-500">
+                                <h4 class="text-base font-semibold text-indigo-700 mb-1">80% Efficiency</h4>
+                                <div class="text-sm text-gray-600">Standard field conditions</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Field Implications -->
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">⚠️ Practical Guidelines</h3>
+                        <ul class="text-base space-y-2">
+                            <li><strong>Level Wind Systems:</strong> Higher efficiency (90-95%) with controlled placement</li>
+                            <li><strong>Manual/Random Winding:</strong> Lower efficiency (75-85%) due to gaps</li>
+                            <li><strong>Vibration During Transport:</strong> Can settle layers, improving density over time</li>
+                            <li><strong>Safety Margin:</strong> Field use assumes 80% baseline for planning</li>
+                            <li><strong>Efficiency Verification:</strong> Use Reel Estimator efficiency percentage labels in capacity and layer results for selected value confirmation</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Advanced Weight Estimation Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">⚖️</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Advanced Cable Weight Estimation</h2>
+                    </div>
+
+                    <!-- Weight Calculation Methodology -->
+                    <div class="bg-red-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-red-800 mb-3">Volumetric Weight Formula</h3>
+                        <p class="text-base text-gray-700 mb-4">Cable weight is estimated using theoretical volume calculations multiplied by material specific gravities, providing pounds per 1000 feet for large-scale planning.</p>
+                        <div class="bg-white p-4 rounded-lg border border-red-200">
+                            <div class="text-base font-mono text-center text-red-700 mb-3">
+                                W<sub>conductor</sub> = 340.5 × (d<sub>c_in</sub>)² × SG<sub>conductor</sub> × 1.03
+                            </div>
+                            <div class="text-base font-mono text-center text-red-700 mb-3">
+                                W<sub>insulation</sub> = 340.5 × ((d<sub>in</sub>)² - (d<sub>c_in</sub>)²) × SG<sub>insulation</sub>
+                            </div>
+                            <div class="text-base font-mono text-center text-red-700">
+                                W<sub>total</sub> = W<sub>conductor</sub> + W<sub>insulation</sub>
+                            </div>
+                            <div class="text-sm text-gray-600 mt-3 text-center"><em>Units: lbs/1000 ft; d<sub>c</sub> = conductor diameter, d = cable diameter</em></div>
+                        </div>
+                    </div>
+
+                    <!-- Material Properties -->
+                    <div class="space-y-6 mb-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Standard Specific Gravities (SG)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="bg-white p-4 rounded border">
+                                    <div class="text-lg font-semibold text-red-700 mb-2">Conductors</div>
+                                    <ul class="text-sm space-y-1">
+                                        <li>Copper (pure): 8.89</li>
+                                        <li>Aluminum: 2.70</li>
+                                        <li>Steel: ~7.85</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-white p-4 rounded border">
+                                    <div class="text-lg font-semibold text-red-700 mb-2">Insulations</div>
+                                    <ul class="text-sm space-y-1">
+                                        <li>PVC: 1.40</li>
+                                        <li>XLPE (Cross-linked Polyethylene): 0.92</li>
+                                        <li>EPR (Ethylene Propylene Rubber): ~0.90</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-400">
+                            <h3 class="text-xl font-semibold text-yellow-800 mb-4">⚠️ Calculation Notes</h3>
+                            <ul class="text-base space-y-2 text-gray-700">
+                                <li><strong>Stranding Factor (1.03):</strong> Accounts for space between conductor strands (not solid wire)</li>
+                                <li><strong>Concentric Insulation:</strong> Assumes uniform thickness around conductor</li>
+                                <li><strong>Approximations:</strong> Real cable weight may vary ±15% due to manufacturing tolerances</li>
+                                <li><strong>Temperature Effects:</strong> Thermal expansion not included (negligible for weight planning)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Application Guidelines -->
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">📏 Design Applications</h3>
+                        <ul class="text-base space-y-2">
+                            <li><strong>Reel Weight Planning:</strong> Calculate total load for transportation and lifting</li>
+                            <li><strong>Structural Support:</strong> Ensure rack/stand capacity exceeds loaded weight</li>
+                            <li><strong>Fleet Angle Loads:</strong> Weight affects payout tension and bend stress</li>
+                            <li><strong>Cost Estimation:</strong> Weight per length helps project material budgeting</li>
+                            <li><strong>Weight Verification:</strong> Use Reel Estimator weight estimation outputs (conductor, insulation, total lbs/1000 ft) when advanced section is enabled</li>
+                        </ul>
+                    </div>
+                </article>
+
+                <!-- Cable Bend Radius Compliance Section -->
+                <article class="enhanced-article glow-effect">
+                    <div class="flex items-center mb-6">
+                        <div class="text-4xl mr-4">📐</div>
+                        <h2 class="text-2xl font-bold text-[#0058B3]">Cable Bend Radius Compliance</h2>
+                    </div>
+
+                    <!-- Bend Radius Fundamentals -->
+                    <div class="bg-teal-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-teal-800 mb-3">Winding Bend Geometry</h3>
+                        <p class="text-base text-gray-700 mb-4">During reel winding, cables bend around the core diameter. The effective bend radius is always D<sub>c</sub>/2 (half the core diameter), creating consistent curvature throughout the winding process.</p>
+                        <div class="bg-white p-4 rounded-lg border border-teal-200">
+                            <div class="text-base font-mono text-center text-teal-700 mb-2">
+                                Bend Radius = D<sub>c</sub> / 2
+                            </div>
+                            <div class="text-sm text-gray-600 text-center">D<sub>c</sub> = Core/Barrel Diameter</div>
+                        </div>
+                    </div>
+
+                    <!-- Relationship to Diameter Ratio -->
+                    <div class="space-y-6 mb-6">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-3">Core-to-Cable Diameter Ratio (D<sub>c</sub>/d)</h3>
+                            <ul class="text-base space-y-2">
+                                <li><strong>Direct Link:</strong> D<sub>c</sub>/d = 2 × (Bend Radius / d)</li>
+                                <li><strong>Example:</strong> 21:1 ratio = bend radius of 10.5× cable diameter</li>
+                                <li><strong>Compliance:</strong> Ratio must exceed cable's minimum bend radius requirement</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-400">
+                            <h3 class="text-xl font-semibold text-red-800 mb-4">⚠️ Damage from Excessive Bending</h3>
+                            <ul class="text-base space-y-2 text-gray-700">
+                                <li><strong>Insulation Failure:</strong> Compression cracks on inner radius, allowing moisture ingress</li>
+                                <li><strong>Conductor Damage:</strong> Plastic deformation or broken strands in extreme cases</li>
+                                <li><strong>Armor Distortion:</strong> Metal sheaths kink, compromising mechanical protection</li>
+                                <li><strong>Reduced Lifespan:</strong> Accelerated aging from stress concentrations</li>
+                                <li><strong>Safety Risks:</strong> Faulty cable can cause electrical hazards or mechanical failure</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Cable-Specific Guidelines -->
+                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Minimum D<sub>c</sub>/d Ratios by Cable Type</h3>
+                        <p class="text-base text-gray-700 mb-4">Cable stiffness determines bend radius tolerance. Stiffer cables require larger core diameters for safe winding to prevent exceeding minimum bend radii.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg border-l-4 border-teal-400">
+                                <h4 class="text-lg font-semibold text-teal-700 mb-3">📉 Bare Copper Wires (Most Flexible)</h4>
+                                <div class="text-xl font-bold text-teal-800 mb-2">12:1 Minimum</div>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li><strong>Flexibility:</strong> High (solid or stranded)</li>
+                                    <li><strong>Bend Radius:</strong> 6× cable diameter</li>
+                                    <li><strong>Risk:</strong> Low - minimal damage risk</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg border-l-4 border-orange-400">
+                                <h4 class="text-lg font-semibold text-orange-700 mb-3">🔥 RW90 Cables (XLPE Insulated)</h4>
+                                <div class="text-xl font-bold text-orange-800 mb-2">21:1 Minimum</div>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li><strong>Flexibility:</strong> Medium (cross-linked polyethylene)</li>
+                                    <li><strong>Bend Radius:</strong> 10.5× cable diameter</li>
+                                    <li><strong>Risk:</strong> Moderate - insulation cracking possible</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg border-l-4 border-orange-400">
+                                <h4 class="text-lg font-semibold text-orange-700 mb-3">⚡ ACWU90 Cables (Aluminum Conductor, XLPE)</h4>
+                                <div class="text-xl font-bold text-orange-800 mb-2">21:1 Minimum</div>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li><strong>Flexibility:</strong> Medium (shielded design)</li>
+                                    <li><strong>Bend Radius:</strong> 10.5× cable diameter</li>
+                                    <li><strong>Risk:</strong> Moderate - aluminum conductor stress</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg border-l-4 border-red-400">
+                                <h4 class="text-lg font-semibold text-red-700 mb-3">🛡️ TECK90 Cables (Armored)</h4>
+                                <div class="text-xl font-bold text-red-800 mb-2">25:1 Minimum</div>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li><strong>Flexibility:</strong> Low (metallic armor)</li>
+                                    <li><strong>Bend Radius:</strong> 12.5× cable diameter</li>
+                                    <li><strong>Risk:</strong> High - armor kinking, severe damage</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Implementation Notes -->
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">✅ Best Practices</h3>
+                        <ul class="text-base space-y-2">
+                            <li><strong>Pre-Wind Inspection:</strong> Check cable for existing bends or damage before spooling</li>
+                            <li><strong>Ratio Monitoring:</strong> Use Reel Estimator D<sub>c</sub>/d display for compliance verification</li>
+                            <li><strong>Custom Requirements:</strong> Specialized cables may need higher ratios - consult manufacturer</li>
+                            <li><strong>Temperature Effects:</strong> Cold cables are stiffer - warm slightly before tight bending</li>
+                            <li><strong>Gradual Bends:</strong> Avoid sharp angles during installation and payout</li>
+                        </ul>
+                    </div>
+                </article>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="flex">
+                    <a href="learning-hub.html" class="px-4 py-2 bg-blue-600 border-2 border-blue-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50 text-sm no-underline">🎓 Back to Learning Hub</a>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-sm font-medium text-[#0058B3] select-none mb-1">Made With ❤️ By: Lucas and Cline 🤖</p>
+                    <p class="text-xs font-semibold header-gradient select-none">EECOL Wire Tools Foundation - 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../utils/dark-mode.js"></script>
+</body>
+</html>

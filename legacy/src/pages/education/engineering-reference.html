@@ -1,0 +1,413 @@
+<!-- EECOL Learning Hub - Engineering Reference Module -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="../../../manifest.json">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
+    <title>EECOL Learning Hub - Engineering Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../utils/theme-loader.js"></script>
+    <link rel="stylesheet" href="../../../src/assets/css/eecol-theme.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-white min-h-screen relative">
+
+<style>
+/* Native App-Style Design */
+.app-container {
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+}
+
+.learning-content {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow-effect {
+  position: relative;
+}
+
+.glow-effect::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg,
+    rgba(0, 88, 179, 0.1),
+    rgba(0, 123, 255, 0.1),
+    rgba(0, 88, 179, 0.1)
+  );
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.learning-content:hover .glow-effect::before {
+  opacity: 1;
+}
+
+/* Smooth scrolling and native feel */
+html {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+</style>
+
+    <!-- App-Style Header -->
+    <div class="app-container bg-white/70 backdrop-blur-xl mx-4 sm:mx-6 mt-4 mb-8 p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+        <div class="text-center">
+            <!-- Prominent EECOL Logo -->
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-[#0058B3] drop-shadow-xl eecol-logo-tilt">
+                        <circle cx="12" cy="12" r="11.35" fill="white" stroke="currentColor" stroke-width="2"/>
+                        <rect x="4" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+                        <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M 8,12 C 12,11 16,13 20,12" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                        <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Main Title with Gradient -->
+            <h1 class="text-4xl sm:text-5xl font-black mb-4 header-gradient leading-tight">
+                Engineering Reference
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="text-lg text-gray-700 font-medium mb-2 max-w-2xl mx-auto">
+                Advanced Mathematics for Cable Reel Capacity & Weight Estimation
+            </p>
+            <p class="text-base text-[#0058B3] font-semibold opacity-90">
+                Precision engineering models for professional cable logistics
+            </p>
+        </div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="mx-4 sm:mx-6 lg:mx-8 mb-12">
+        <div class="max-w-6xl mx-auto space-y-8">
+
+            <!-- Technical Foundation -->
+            <div class="learning-content bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">📊</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#0058B3] mb-2">Technical Foundation</h2>
+                        <p class="text-gray-700">Precision engineering drives efficient cable logistics</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#F0F8FF] p-6 rounded-2xl text-center">
+                        <div class="text-4xl mb-3">📏</div>
+                        <h3 class="text-xl font-bold text-[#0058B3] mb-2">Geometric Analysis</h3>
+                        <p class="text-gray-600">Reel dimensions & cable packing efficiency</p>
+                    </div>
+                    <div class="bg-[#F0F8FF] p-6 rounded-2xl text-center">
+                        <div class="text-4xl mb-3">⚖️</div>
+                        <h3 class="text-xl font-bold text-[#0058B3] mb-2">Material Science</h3>
+                        <p class="text-gray-600">Weight calculations by component layers</p>
+                    </div>
+                    <div class="bg-[#F0F8FF] p-6 rounded-2xl text-center">
+                        <div class="text-4xl mb-3">🔄</div>
+                        <h3 class="text-xl font-bold text-[#0058B3] mb-2">Unit Conversion</h3>
+                        <p class="text-gray-600">Metric ↔ Imperial synchronization</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cable Reel Geometry -->
+            <div class="learning-content bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">📏</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#0058B3] mb-2">Cable Reel Geometry</h2>
+                        <p class="text-gray-700">Mathematical modeling of reel capacity and cable packing</p>
+                    </div>
+                </div>
+
+                <!-- Key Dimensions -->
+                <div class="bg-[#FFF9C4] p-6 rounded-2xl mb-6">
+                    <h3 class="text-2xl font-bold text-amber-800 mb-4">📐 Key Dimensions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl">
+                            <div class="text-lg font-bold text-amber-700">D<sub>F</sub> = Flange Diameter</div>
+                            <div class="text-sm text-gray-600">Reel outside edge diameter</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <div class="text-lg font-bold text-amber-700">D<sub>B</sub> = Barrel Diameter</div>
+                            <div class="text-sm text-gray-600">Central hub diameter</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <div class="text-lg font-bold text-amber-700">T = Traverse Width</div>
+                            <div class="text-sm text-gray-600">Reel face width</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl">
+                            <div class="text-lg font-bold text-amber-700">D<sub>c</sub> = Cable Diameter</div>
+                            <div class="text-sm text-gray-600">Cable outer diameter</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reel Factor Formula -->
+                <div class="bg-gray-50 p-6 rounded-2xl mb-6">
+                    <h3 class="text-2xl font-bold text-[#0058B3] mb-4">Reel Factor Calculation</h3>
+                    <div class="text-center bg-white p-6 rounded-xl shadow-lg">
+                        <div class="text-2xl font-bold text-amber-700 mb-3">F = (H+B) × H × T × 0.262</div>
+                        <p class="text-gray-600">Where H = (D<sub>F</sub> - D<sub>B</sub>)/2 and 0.262 converts cubic inches to feet</p>
+                    </div>
+                </div>
+
+                <!-- Capacity Formula -->
+                <div class="bg-[#E8F4FD] p-6 rounded-2xl mb-6">
+                    <h3 class="text-2xl font-bold text-[#0058B3] mb-4">Maximum Cable Length</h3>
+                    <div class="text-center bg-white p-6 rounded-xl shadow-lg">
+                        <div class="text-2xl font-bold text-[#0058B3] mb-3">L<sub>max</sub> = D<sub>c</sub><sup>2</sup> / F</div>
+                        <p class="text-gray-600">Capacity decreases with diameter squared</p>
+                    </div>
+                </div>
+
+                <!-- Safety Factor -->
+                <div class="bg-green-50 border-l-4 border-green-400 p-6 rounded-2xl">
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3">🛡️</div>
+                        <h3 class="text-2xl font-bold text-green-800">Practical Efficiency Factor</h3>
+                    </div>
+                    <div class="text-center bg-white p-6 rounded-xl shadow-lg">
+                        <div class="text-2xl font-bold text-green-700 mb-3">L<sub>estimate</sub> = L<sub>max</sub> × η</div>
+                        <p class="text-gray-700 mb-3">η = 0.80 (80% of theoretical maximum)</p>
+                        <p class="text-sm text-gray-600">Provides safety margins for winding imperfections</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materials Science -->
+            <div class="learning-content bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">⚖️</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#0058B3] mb-2">Material Science & Weight</h2>
+                        <p class="text-gray-700">Component-based weight calculations for multi-layer cables</p>
+                    </div>
+                </div>
+
+                <!-- Material Density Chart -->
+                <div class="bg-purple-50 p-6 rounded-2xl mb-6">
+                    <h3 class="text-2xl font-bold text-purple-800 mb-4">📊 Material Density Reference</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-xl font-bold text-amber-700 mb-1">Copper</div>
+                            <div class="text-sm text-gray-600">8.89 g/cm³</div>
+                            <div class="text-xs text-gray-500">Conductor</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-xl font-bold text-blue-700 mb-1">Aluminum</div>
+                            <div class="text-sm text-gray-600">2.70 g/cm³</div>
+                            <div class="text-xs text-gray-500">Armor/Conductor</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-xl font-bold text-gray-700 mb-1">PVC</div>
+                            <div class="text-sm text-gray-600">1.40 g/cm³</div>
+                            <div class="text-xs text-gray-500">Jackets</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-xl font-bold text-green-700 mb-1">XLPE</div>
+                            <div class="text-sm text-gray-600">0.92 g/cm³</div>
+                            <div class="text-xs text-gray-500">Insulation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weight Formulas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-[#F8F4FF] p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-[#0058B3] mb-4">Conductor Weight</h3>
+                        <div class="text-center bg-white p-4 rounded-xl shadow-lg mb-4">
+                            <div class="text-xl font-bold text-purple-700 mb-2">W<sub>c</sub> = 340.5 × D² × G</div>
+                            <div class="text-sm text-gray-600">Weight per 1000 feet (lbs)</div>
+                        </div>
+                        <div class="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-400">
+                            <p class="text-sm text-gray-700"><strong>Stranding Factor:</strong> Add 3% for stranded conductors</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#FFF4F8] p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-[#0058B3] mb-4">Annular Layer Weight</h3>
+                        <div class="text-center bg-white p-4 rounded-xl shadow-lg mb-4">
+                            <div class="text-xl font-bold text-pink-700 mb-2">W<sub>AL</sub> = 340.5 × (D² – d²) × G</div>
+                            <div class="text-sm text-gray-600">For insulation, jackets, armor</div>
+                        </div>
+                        <p class="text-sm text-gray-700">D=outer diameter, d=inner diameter</p>
+                    </div>
+                </div>
+
+                <!-- Multi-Layer Construction -->
+                <div class="bg-gray-50 p-6 rounded-2xl">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">🏗️ Multi-Layer Cable Construction</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                            <span class="font-medium">1. Conductor Core</span>
+                            <span class="text-purple-600 font-mono text-sm">W<sub>c</sub> × Stranding Factor</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                            <span class="font-medium">2. Insulation Layer</span>
+                            <span class="text-green-600 font-mono text-sm">340.5 × (D<sub>ins</sub>² - D<sub>c</sub>²) × G</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                            <span class="font-medium">3. Inner Jacket</span>
+                            <span class="text-blue-600 font-mono text-sm">340.5 × (D<sub>J1</sub>² - D<sub>ins</sub>²) × G</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                            <span class="font-medium">4. Armor Layer</span>
+                            <span class="text-amber-600 font-mono text-sm">Geometric calculation</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white p-3 rounded-lg">
+                            <span class="font-medium">5. Outer Jacket</span>
+                            <span class="text-pink-600 font-mono text-sm">Final annular layer</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-gradient-to-r from-[#0058B3] to-[#004a99] text-white p-3 rounded-lg font-semibold">
+                            <span>Total Weight</span>
+                            <span class="font-mono">Σ (All layers)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unit Conversion -->
+            <div class="learning-content bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">🔄</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#0058B3] mb-2">Unit Conversion & Precision</h2>
+                        <p class="text-gray-700">International standards for metric-imperial synchronization</p>
+                    </div>
+                </div>
+
+                <!-- Conversion Standards -->
+                <div class="bg-teal-50 p-6 rounded-2xl mb-6">
+                    <h3 class="text-xl font-bold text-teal-800 mb-4">📏 Precision Conversion Standards</h3>
+                    <p class="text-gray-700 mb-4">International Foot = <strong>0.3048 meters</strong> (exact definition)</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-teal-700">Feet → Meters</div>
+                            <div class="text-sm text-gray-600">1 ft = 0.3048 m</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl text-center">
+                            <div class="text-lg font-bold text-teal-700">Meters → Feet</div>
+                            <div class="text-sm text-gray-600">1 m ≈ 3.28084 ft</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cutting Protocols -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-2xl border-l-4 border-blue-400">
+                        <div class="flex items-center mb-4">
+                            <div class="text-2xl mr-3">📏</div>
+                            <h3 class="text-xl font-bold text-blue-800">Metric → Imperial Protocol</h3>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl mb-4 text-center">
+                            <div class="text-lg font-bold text-blue-700 mb-2">F<sub>stop</sub> = F<sub>start</sub> + (L<sub>M</sub> × 3.28084)</div>
+                            <div class="text-sm text-gray-600">Calculate stop mark on imperial-marked wire</div>
+                        </div>
+                        <p class="text-sm text-gray-700"><strong>Example:</strong> 500m cut starting at 1000ft → Stop at 2640.42ft</p>
+                    </div>
+
+                    <div class="bg-purple-50 p-6 rounded-2xl border-l-4 border-purple-400">
+                        <div class="flex items-center mb-4">
+                            <div class="text-2xl mr-3">📏</div>
+                            <h3 class="text-xl font-bold text-purple-800">Imperial → Metric Protocol</h3>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl mb-4 text-center">
+                            <div class="text-lg font-bold text-purple-700 mb-2">M<sub>stop</sub> = M<sub>start</sub> + (L<sub>F</sub> × 0.3048)</div>
+                            <div class="text-sm text-gray-600">Calculate stop mark on metric-marked wire</div>
+                        </div>
+                        <p class="text-sm text-gray-700"><strong>Example:</strong> 1000ft cut starting at 100m → Stop at 404.8m</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Implementation Summary -->
+            <div class="learning-content bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl border border-white/20 glow-effect">
+                <div class="flex items-center mb-6">
+                    <div class="text-4xl mr-4">✅</div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-[#0058B3] mb-2">Implementation Essentials</h2>
+                        <p class="text-gray-700">Key formulas and constants for accurate cable calculations</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-100 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Capacity Modeling</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>Geometric:</strong> Use Reel Factor F = (H+B)×H×T×0.262</li>
+                            <li><strong>Safety:</strong> Apply η = 0.80 efficiency factor</li>
+                            <li><strong>Capacity:</strong> L<sub>max</sub> = D<sub>c</sub>² / F</li>
+                            <li><strong>Estimate:</strong> L<sub>practical</sub> = L<sub>max</sub> × η</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gray-100 p-6 rounded-2xl">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">⚖️ Weight Calculations</h3>
+                        <ul class="space-y-2 text-sm">
+                            <li><strong>Conductor:</strong> W<sub>c</sub> = 340.5 × D² × G × K</li>
+                            <li><strong>Insulation:</strong> W<sub>AL</sub> = 340.5 × (D²-d²) × G</li>
+                            <li><strong>Stranding:</strong> K = 1.03 for stranded conductors</li>
+                            <li><strong>Total:</strong> Sum all annular layer weights</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-[#0058B3] text-white p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold mb-4">🔬 Material Constants</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                        <div>
+                            <div class="text-lg font-bold">Copper</div>
+                            <div class="text-sm opacity-90">8.89 g/cm³</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold">Aluminum</div>
+                            <div class="text-sm opacity-90">2.70 g/cm³</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold">PVC</div>
+                            <div class="text-sm opacity-90">1.40 g/cm³</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold">XLPE</div>
+                            <div class="text-sm opacity-90">0.92 g/cm³</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Professional Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <div class="flex space-x-6">
+                    <a href="learning-hub.html" class="px-4 py-2 bg-blue-600 border-2 border-blue-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50 text-sm no-underline">⬅️ Back to Learning Hub</a>
+                    <a href="../index/index.html" class="px-4 py-2 bg-green-600 border-2 border-green-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-green-700 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-green-600 focus:ring-opacity-50 text-sm no-underline">🏠 Wire Tools</a>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-sm font-medium text-[#0058B3] select-none mb-1">Made With ❤️ By: Lucas and Cline 🤖</p>
+                    <p class="text-xs font-semibold header-gradient select-none">EECOL Learning Hub - Engineering Reference - 2025</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../utils/dark-mode.js"></script>
+</body>
+</html>
