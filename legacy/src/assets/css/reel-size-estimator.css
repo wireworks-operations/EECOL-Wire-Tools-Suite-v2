@@ -1,0 +1,183 @@
+/* Load Roboto Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    --eecol-blue: #0058B3;
+    --eecol-orange: #FF9900;
+}
+
+.eecol-blue-bg {
+    background-image: linear-gradient(to bottom, var(--eecol-blue) 20%, white 80%);
+}
+
+.header-gradient {
+    background-image: linear-gradient(90deg, var(--eecol-blue), #004a99);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.card-border-blue {
+    border-left-color: var(--eecol-blue);
+}
+
+.eecol-logo-tilt {
+    transform: rotate(-20deg);
+    transform-origin: center;
+}
+
+/* Enhanced mobile responsive improvements */
+@media (max-width: 640px) {
+    /* Touch-friendly input sizing */
+    .mobile-touch-input {
+        padding: 0.75rem !important;
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        min-height: 44px !important; /* Apple's minimum touch target */
+    }
+
+    /* Better button stacking */
+    .mobile-button-stack {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+        width: 100%;
+    }
+    .mobile-button-stack button,
+    .mobile-button-stack a {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0.75rem 1rem !important;
+        min-height: 44px !important;
+    }
+
+    /* Compress larger text on mobile for better fit */
+    .text-3xl {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
+    }
+
+    /* Compact spacing for mobile forms */
+    .space-y-4 > * + * {
+        margin-top: 0.75rem !important;
+    }
+    .space-y-6 > * + * {
+        margin-top: 1rem !important;
+    }
+
+    /* Better mobile modal sizing */
+    #customModal .relative {
+        margin: auto !important;
+        max-width: 90vw !important;
+    }
+}
+
+/* Additional touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device specific enhancements */
+    button, input, select {
+        min-height: 44px !important;
+    }
+}
+
+/* Reel Size Estimator specific styles */
+.reel-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.spec-item {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.spec-label {
+    font-weight: bold;
+    color: #374151;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.spec-value {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1e40af;
+}
+
+.capacity-info {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 2px solid #16a34a;
+    color: #166534;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+    text-align: center;
+}
+
+.practicality-score {
+    font-size: 18px;
+    font-weight: bold;
+    color: #059669;
+    text-align: center;
+    margin: 10px 0;
+}
+
+/* Progress visualization for reel layers */
+.reel-layer-viz {
+    margin: 10px 0;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.layer-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 8px;
+    background: #0058B3;
+    margin: 2px;
+    border-radius: 2px;
+}
+
+.layer-dead {
+    background: #ef4444;
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white !important;
+        font-size: 12pt;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .print-break {
+        page-break-before: always;
+    }
+
+    .eecol-blue-bg {
+        background: white !important;
+    }
+
+    .header-gradient {
+        color: #0058B3 !important;
+        -webkit-text-fill-color: #0058B3 !important;
+    }
+}

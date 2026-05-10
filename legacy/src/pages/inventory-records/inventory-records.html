@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" id="csp-meta"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'">
+    <title>EECOL Wire Inventory Tracking System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../assets/css/cutting-records.css">
+    <link rel="stylesheet" href="../../assets/css/eecol-theme.css">
+    <link rel="manifest" href="../../../manifest.json">
+    <meta name="theme-color" content="#0058B3">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EECOL Tools">
+    <link rel="apple-touch-icon" href="../../../src/assets/icons/icon-192x192.png">
+    <script src="../../utils/theme-loader.js"></script>
+    <script src="../../core/database/indexeddb.js"></script>
+    <script src="../../utils/modals.js"></script>
+    <script src="../../utils/mobile-menu.js"></script>
+</head>
+
+<body class="p-3 sm:p-6 h-screen flex flex-col eecol-blue-bg relative">
+
+
+
+    <!-- Main Container -->
+    <div
+        class="flex-1 w-full max-w-md md:max-w-xl lg:max-w-7xl xl:max-w-9xl bg-white p-4 sm:p-6 rounded-xl shadow-2xl mx-auto border-2 border-solid border-[#0058B3] overflow-hidden flex flex-col mb-16 relative">
+
+        <!-- Header -->
+        <div class="flex justify-center mb-1">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                class="drop-shadow-lg" style="transform: rotate(-17deg);">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#0058B3;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#004a99;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="12" cy="12" r="11.35" fill="white" stroke="url(#logoGradient)" stroke-width="2" />
+                <rect x="4" y="4" width="4" height="16" rx="1" fill="url(#logoGradient)" />
+                <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="url(#logoGradient)" stroke-width="3.5"
+                    stroke-linecap="round" />
+                <path d="M 8,12 C 12,11 16,13 20,12" stroke="url(#logoGradient)" stroke-width="3.5"
+                    stroke-linecap="round" />
+                <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="url(#logoGradient)" stroke-width="3.5"
+                    stroke-linecap="round" />
+            </svg>
+        </div>
+
+        <h1 class="text-3xl font-black mb-3 text-center header-gradient">
+            EECOL Wire Inventory Records & Tracking
+        </h1>
+        <p class="mb-5 text-center text-sm font-medium">
+            Track wire inventory pieces with type, condition, and measurements.
+        </p>
+
+        <div class="flex-1 overflow-y-auto">
+            <div class="flex flex-col pb-4">
+                <div class="space-y-6">
+
+                    <!-- Auth Status -->
+                    <div class="p-2 bg-yellow-50/70 border-l-4 border-yellow-500 rounded-lg shadow-md">
+                        <p class="text-xs font-semibold text-yellow-800">IndexedDB Mode - Enhanced Data Persistence</p>
+                        <p class="text-xs font-mono text-gray-700 break-all">
+                            User ID: <span class="font-bold">LocalUser</span>
+                        </p>
+                        <p class="text-xs text-gray-600 mt-1">Data is saved to IndexedDB.</p>
+                        <p class="text-xs text-blue-600 mt-1 font-medium">💡 JSON Backup & Import: Use the "JSON Backup
+                            Export" and "JSON Backup Import" buttons to save/load complete data backups.</p>
+                    </div>
+
+                    <!-- Export Status Notification -->
+                    <div id="exportNotification"
+                        class="p-2 bg-blue-50/70 border-l-4 border-blue-500 rounded-lg shadow-md">
+                        <p class="text-xs font-semibold text-blue-800">Last Export</p>
+                        <p class="text-xs text-blue-600 mt-1 mb-1 font-medium">→ Click export status links below to
+                            export data</p>
+                        <p class="text-xs text-gray-700">JSON Export: <span id="lastJsonExport"><a href="#"
+                                    onclick="exportJSONBackup(); return false;"
+                                    style="color: #f59e0b; font-weight: 600; text-decoration: underline;">Never
+                                    exported</a></span></p>
+                    </div>
+
+                    <div
+                        class="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg shadow-md">
+                        <button id="toggleStats"
+                            class="w-full text-left font-semibold text-blue-800 flex justify-between items-center">
+                            📊 Quick Statistics
+                            <span id="statsToggle">▼</span>
+                        </button>
+                        <div id="statsContent" class="mt-2 text-xs space-y-1">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>Total Items: <span id="totalItems" class="font-bold">0</span></div>
+                                <div>Total INA Length: <span id="totalLength" class="font-bold">0m</span></div>
+                                <div>Damaged Pieces: <span id="damagedItems" class="font-bold">0</span></div>
+                                <div>Tailends: <span id="tailendReasons" class="font-bold">0</span></div>
+                                <div>Average Length: <span id="avgLength" class="font-bold">0m</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="mb-4 p-3 bg-white rounded-xl shadow-md">
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <input id="searchInput" type="text"
+                                placeholder="Search by product code, person, comments..."
+                                class="flex-1 min-w-48 p-2 border border-gray-300 rounded-lg text-sm" />
+                            <select id="filterByField" class="p-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="all">All Fields</option>
+                                <option value="productCode">Product Code</option>
+                                <option value="personName">Person Name</option>
+                                <option value="inventoryComments">Comments</option>
+                                <option value="lineCode">Line #</option>
+                            </select>
+                            <select id="sortByField" class="p-2 border border-gray-300 rounded-lg text-sm">
+                                <option value="timestamp">Newest First</option>
+                                <option value="productCode">Product Code (A-Z)</option>
+                                <option value="currentLength">Current Length (Low-High)</option>
+                                <option value="actualLength">Actual Length (Low-High)</option>
+                                <option value="personName">Person Name (A-Z)</option>
+                                <option value="inventoryDate">Date (Newest First)</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <div class="flex items-center space-x-2">
+                                <label class="text-xs">Show:</label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="filterDamaged" value="all" checked class="mr-1"> All
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="filterDamaged" value="damaged" class="mr-1"> Damaged Only
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="filterDamaged" value="tailends" class="mr-1"> Tailends
+                                    Only
+                                </label>
+                            </div>
+                            <input id="dateFrom" type="date" class="p-2 border border-gray-300 rounded-lg text-sm" />
+                            <input id="dateTo" type="date" class="p-2 border border-gray-300 rounded-lg text-sm" />
+                            <button id="clearFilters"
+                                class="px-3 py-2 bg-blue-700 text-white rounded-xl shadow-lg text-sm hover:bg-blue-800 transition duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-50">
+                                Clear Filters
+                            </button>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3 text-center header-gradient">Add Inventory Item</h3>
+
+                    <!-- Form Fields - Row 1 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                                <label for="inventoryDate" class="block text-xs font-semibold mb-1 header-gradient">Date
+                                    (Leave Empty For Current Date)</label>
+                                <input id="inventoryDate" type="date"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                            </div>
+                            <div>
+                                <label for="personName"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Name</label>
+                                <input id="personName" type="text" placeholder="Enter name"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm uppercase" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields - Row 2 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                            <div>
+                                <label for="reason"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Reason</label>
+                                <select id="reason" onchange="handleReasonChange()"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm">
+                                    <option value="">Select a reason...</option>
+                                    <option value="discrepancy">Discrepancy</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                                <input id="reasonCustom" type="text" placeholder="Enter custom reason"
+                                    style="display: none;"
+                                    class="w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                            </div>
+                            <div>
+                                <label for="note" class="block text-xs font-semibold mb-1 header-gradient">Note</label>
+                                <select id="note" onchange="handleNoteChange()"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm">
+                                    <option value="">Select a note...</option>
+                                    <option value="tail end">Tail End</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                                <input id="noteCustom" type="text" placeholder="Enter custom note"
+                                    style="display: none;"
+                                    class="w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                            </div>
+                            <div>
+                                <label for="productCode"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Product Code</label>
+                                <input id="productCode" type="text" placeholder="Wire Product Code"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm uppercase" />
+                            </div>
+                            <div>
+                                <label for="coilCode" class="block text-xs font-semibold mb-1 header-gradient">Coil
+                                    Code</label>
+                                <input id="coilCode" type="text" placeholder="A,B,Z,etc." maxlength="1"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm uppercase" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields - Row 3 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                            <div>
+                                <label for="currentLength"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Current Length</label>
+                                <div class="flex space-x-1">
+                                    <input id="currentLength" type="number" step="0.01" placeholder="0" value=""
+                                        class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                                    <select id="currentLengthUnit"
+                                        class="w-auto p-2 border border-gray-300 rounded-lg bg-white shadow-sm font-medium header-gradient text-sm">
+                                        <option value="m">m</option>
+                                        <option value="ft">ft</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="actualLength"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Actual Length</label>
+                                <div class="flex space-x-1">
+                                    <input id="actualLength" type="number" step="0.01" placeholder="0" value=""
+                                        class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                                    <select id="actualLengthUnit"
+                                        class="w-auto p-2 border border-gray-300 rounded-lg bg-white shadow-sm font-medium header-gradient text-sm">
+                                        <option value="m">m</option>
+                                        <option value="ft">ft</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="averageCost"
+                                    class="block text-xs font-semibold mb-1 header-gradient">Average Cost</label>
+                                <div class="flex space-x-1">
+                                    <input id="averageCost" type="number" step="0.01" placeholder="0.00"
+                                        class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                                    <select id="costUnit"
+                                        class="w-auto p-2 border border-gray-300 rounded-lg bg-white shadow-sm font-medium header-gradient text-sm">
+                                        <option value="$">$/m</option>
+                                        <option value="$/ft">$/ft</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="totalValue" class="block text-xs font-semibold mb-1 header-gradient">Total
+                                    Value</label>
+                                <input id="totalValue" type="number" step="0.01" placeholder="0.00"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields - Row 4 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                                <label for="lineCode" class="block text-xs font-semibold mb-1 header-gradient">Line
+                                    #</label>
+                                <input id="lineCode" type="text" placeholder="003 or A" maxlength="3"
+                                    class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm uppercase" />
+                            </div>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="flex items-center space-x-2">
+                                    <input id="adjustCB" type="checkbox"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                                    <span class="text-xs font-semibold header-gradient">Adjust</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input id="approvedCB" type="checkbox"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                                    <span class="text-xs font-semibold header-gradient">Approved</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input id="notApprovedCB" type="checkbox"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" />
+                                    <span class="text-xs font-semibold header-gradient">Not Approved</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields - Row 5 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <label for="inventoryComments"
+                            class="block text-xs font-semibold mb-1 header-gradient">Comments</label>
+                        <textarea id="inventoryComments" placeholder="Additional comments"
+                            class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm"
+                            rows="2"></textarea>
+                    </div>
+
+                    <!-- Form Fields - Row 6 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <label for="inaNumber" class="block text-xs font-semibold mb-1 header-gradient">INA #</label>
+                        <input id="inaNumber" type="text" placeholder="e.g. INA-123"
+                            class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                    </div>
+
+                    <!-- Form Fields - Row 7 -->
+                    <div class="shadow-md rounded-xl p-2 bg-white">
+                        <label for="inaDate" class="block text-xs font-semibold mb-1 header-gradient">INA Date</label>
+                        <input id="inaDate" type="date"
+                            class="w-full p-2 border border-gray-300 rounded-lg shadow-inner text-sm" />
+                    </div>
+
+
+                    <!-- Data Management Controls -->
+                    <div class="space-y-4">
+                        <div class="p-2 bg-blue-50/70 border-l-4 border-blue-500 rounded-lg shadow-md">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" id="toggleDataControls"
+                                    class="form-checkbox h-4 w-4 text-blue-600" />
+                                <span class="text-sm font-semibold header-gradient">Show Data Management Controls</span>
+                            </label>
+                        </div>
+
+                        <div id="dataControlsSection" class="hidden">
+                            <div class="flex justify-between items-center mt-4 flex-wrap gap-2">
+                                <div class="flex space-x-2 flex-wrap gap-2">
+                                    <button id="exportBtn"
+                                        class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                                        Export All Inventory Records to CSV
+                                    </button>
+                                    <button id="exportDeltaBtn"
+                                        class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+                                        Export New Records to CSV
+                                    </button>
+                                    <button id="exportJSONBtn"
+                                        class="p-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-sm">
+                                        JSON Backup Export
+                                    </button>
+                                    <button id="importJSONBtn"
+                                        class="p-2 bg-lime-600 text-white rounded hover:bg-lime-700 text-sm">
+                                        JSON Backup Import
+                                    </button>
+
+                                    <input id="jsonFileInput" type="file" accept=".json" style="display: none" />
+                                </div>
+                                <div>
+                                    <button id="clearAllBtn"
+                                        class="p-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                        Clear Records
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Record Buttons -->
+                    <div class="pt-2 px-2">
+                        <div class="flex justify-between items-center gap-2">
+                            <button id="undoBtn"
+                                class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold p-3 rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-gray-600 focus:ring-opacity-50 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled title="Undo last action">
+                                ↶ Undo
+                            </button>
+
+                            <button id="recordBtn"
+                                class="flex-1 bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-700 focus:ring-opacity-50 text-sm">
+                                ADD TO INVENTORY
+                            </button>
+
+                            <button id="redoBtn"
+                                class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold p-3 rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-gray-600 focus:ring-opacity-50 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled title="Redo last undone action">
+                                Redo ↷
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorBox"
+                        class="mt-3 p-2 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg shadow-md hidden">
+                        <p class="font-medium text-sm">Input Error:</p>
+                        <p id="errorMessage" class="text-xs"></p>
+                    </div>
+
+                    <!-- Inventory History -->
+                    <div class="p-4 bg-gray-50 border-l-8 border-blue-700 rounded-xl shadow-xl text-center flex-grow overflow-auto"
+                        style="width: 100%; max-height: 32rem;">
+                        <!-- Items Counter -->
+                        <div class="mb-2 p-2 bg-blue-100 rounded-lg">
+                            <p class="text-xs font-semibold">
+                                Total Items: <span id="totalItemsCount">0</span> |
+                                Showing: <span id="displayedItemsCount">0</span>
+                            </p>
+                        </div>
+
+                        <div id="inventoryList" class="p-2 bg-gray-100 rounded-lg h-full max-h-full overflow-y-auto">
+                            <p class="text-sm text-gray-500">No inventory items found yet.</p>
+                        </div>
+
+                        <!-- Loading Indicator -->
+                        <div id="loadingIndicator" class="hidden flex justify-center items-center p-4">
+                            <div class="loading-spinner mr-2"></div>
+                            <span class="text-sm text-gray-600">Loading more items...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer inside main box -->
+        <div class="mt-auto pt-4 border-t border-blue-200 hidden sm:block">
+            <div class="flex justify-between items-center mb-2">
+                <div class="flex space-x-3">
+                    <a href="../index/index.html"
+                        class="px-3 py-1.5 bg-blue-600 border-2 border-blue-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-blue-700 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-blue-600 focus:ring-opacity-50 text-xs no-underline">🏠
+                        Home</a>
+                    <a href="../useful-tool/useful-tool.html"
+                        class="px-3 py-1.5 bg-sky-500 border-2 border-sky-500 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-sky-600 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-sky-500 focus:ring-opacity-50 text-xs no-underline">Is
+                        This Tool Useful?</a>
+                    <a href="../backup/backup.html"
+                        class="px-3 py-1.5 bg-green-500 border-2 border-green-500 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-green-600 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 text-xs no-underline">💾
+                        Backup Guide</a>
+                    <a href="../inventory-reports/inventory-reports.html"
+                        class="px-3 py-1.5 bg-purple-600 border-2 border-purple-600 text-white font-bold rounded-xl shadow-lg transition duration-200 ease-in-out transform hover:bg-purple-700 active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-purple-600 focus:ring-opacity-50 text-xs no-underline">
+                        📈 Reports
+                    </a>
+                </div>
+                <p class="text-xs text-gray-500 font-mono select-none">v0.8.0.4</p>
+            </div>
+            <p class="font-medium text-[#0058B3] text-center select-none mb-1">
+                Made With ❤️ By: Lucas and Cline 🤖
+            </p>
+            <p class="text-xs font-semibold header-gradient text-center select-none">
+                EECOL Wire Tools 2025 - Enterprise Edition
+            </p>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts/Confirmations -->
+    <div id="customModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" id="modalBackdrop"></div>
+        <div class="relative bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 border-2 border-[#0058B3] transform scale-95 opacity-0 transition-all duration-200 ease-out"
+            id="modalContent">
+            <div class="flex items-center justify-center mb-4">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="eecol-logo-tilt">
+                    <defs>
+                        <linearGradient id="modalGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#0058B3;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#004a99;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="12" cy="12" r="11.35" fill="white" stroke="url(#modalGradient)" stroke-width="2" />
+                    <rect x="4" y="4" width="4" height="16" rx="1" fill="url(#modalGradient)" />
+                    <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                    <path d="M 8,12 C 12,11 16,13 20,12" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                    <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="url(#modalGradient)" stroke-width="3.5"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold text-center mb-3 header-gradient" id="modalTitle">Notification</h3>
+            <div class="text-sm text-gray-700 mb-6 whitespace-pre-line text-center" id="modalMessage">Message here...
+            </div>
+            <div class="text-center" id="modalInput" style="display: none;">
+                <input type="text" id="modalInputValue"
+                    class="w-full p-3 border border-gray-300 rounded-lg shadow-inner text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter value...">
+            </div>
+            <div class="flex justify-center space-x-3 mt-6" id="modalButtons">
+                <!-- Buttons will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/inventory-records.js"></script>
+    <script src="../../utils/dark-mode.js"></script>
+</body>
+
+</html>

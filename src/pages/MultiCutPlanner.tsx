@@ -68,7 +68,7 @@ const MultiCutPlanner: React.FC = () => {
                <div className="flex gap-2">
                  <input value={newOrderNumber} onChange={e => setNewOrderNumber(e.target.value.toUpperCase())} className="input-premium flex-1" placeholder="Order #" />
                  <input type="number" value={newCutLength || ''} onChange={e => setNewCutLength(parseFloat(e.target.value))} className="input-premium w-24" placeholder="Len" />
-                 <button onClick={addCut} className="bg-eecol-blue text-white p-2 rounded-xl">＋</button>
+                 <button onClick={addCut} className="bg-eecol-blue text-white p-2 rounded-3xl">＋</button>
                </div>
             </div>
           </div>
@@ -77,7 +77,7 @@ const MultiCutPlanner: React.FC = () => {
             <h2 className="text-lg font-bold header-gradient uppercase mb-4">Plan Summary</h2>
             <div className="flex-1 overflow-y-auto space-y-2 mb-4 min-h-[200px]">
               {cuts.map(c => (
-                <div key={c.id} className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
+                <div key={c.id} className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded-3xl border border-blue-100 dark:border-blue-800">
                   <div className="text-xs font-bold text-eecol-blue dark:text-blue-300">Order: {c.orderNumber || 'N/A'} - {c.length}m</div>
                   <button onClick={() => removeCut(c.id)} className="text-red-500 font-bold px-2">×</button>
                 </div>
@@ -94,7 +94,7 @@ const MultiCutPlanner: React.FC = () => {
                  <span>Remaining on Reel:</span>
                  <span>{remaining.toFixed(1)}m</span>
                </div>
-               <button onClick={savePlan} disabled={cuts.length === 0 || !wireId} className="w-full bg-eecol-blue text-white font-bold py-3 rounded-xl uppercase btn-tactile disabled:opacity-50 mt-2">Save Plan</button>
+               <button onClick={savePlan} disabled={cuts.length === 0 || !wireId} className="w-full bg-eecol-blue text-white font-bold py-3 rounded-3xl uppercase btn-tactile disabled:opacity-50 mt-2">Save Plan</button>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@ const MultiCutPlanner: React.FC = () => {
            <h2 className="text-xl font-black header-gradient uppercase text-center">Saved Cut Plans</h2>
            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
              {plans.map(p => (
-               <div key={p.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow border border-gray-100 dark:border-slate-700">
+               <div key={p.id} className="bg-white dark:bg-slate-800 p-4 rounded-3xl shadow border border-gray-100 dark:border-slate-700">
                  <div className="text-xs font-black header-gradient mb-1 uppercase">{p.wireId}</div>
                  <div className="text-[10px] text-gray-500 mb-3">{new Date(p.timestamp).toLocaleString()}</div>
                  <div className="space-y-1">

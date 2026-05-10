@@ -1,188 +1,121 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
 
 const ShippingManifest: React.FC = () => {
   const { db } = useDatabase();
-  const [inputs, setInputs] = useState({
-    orderNumber: '', date: new Date().toISOString().split('T')[0],
-    wireId: '', amount: 0, amountUnit: 'm', weight: 0, weightUnit: 'lbs',
-    coreD: '', flangeD: '', traverseW: '',
+  const [formData, setFormData] = useState({
+    customerName: '', date: new Date().toISOString().split('T')[0],
+    wireId: '', targetAmount: '', targetAmountUnit: 'm',
+    orderNumber: '', weight: '', weightUnit: 'lbs',
+    coreDiameter: '', flangeDiameter: '', traverseWidth: '',
+    coreUnit: 'in', flangeUnit: 'in', traverseUnit: 'in',
     customDetails: ''
   });
-  const [savedSpecs, setSavedSpecs] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (db) {
-      db.getAll('settings').then((settings: any[]) => {
-        const specs = settings.filter(s => s.name.startsWith('reelSpec_'));
-        setSavedSpecs(specs);
-      });
-    }
-  }, [db]);
-
-  const autoPull = async () => {
-    if (!db) return;
-    const records = await db.getAll<any>('cuttingRecords');
-    if (records.length > 0) {
-      const last = records.sort((a: any, b: any) => b.timestamp - a.timestamp)[0];
-      setInputs(prev => ({
-        ...prev,
-        orderNumber: last.orderNumber,
-        wireId: last.wireId,
-        amount: last.cutLength,
-        amountUnit: last.cutLengthUnit
-      }));
-    }
-  };
 
   const handlePrint = () => {
     window.print();
   };
 
+  const handleAutoPull = async () => {
+    if (!db) return;
+    const records = await db.getAll('cuttingRecords');
+    if (records.length > 0) {
+        const last = records.sort((a: any, b: any) => b.timestamp - a.timestamp)[0];
+        setFormData({
+            ...formData,
+            customerName: last.customerName || '',
+            wireId: last.wireId || '',
+            targetAmount: last.cutLength?.toString() || '',
+            targetAmountUnit: last.cutLengthUnit || 'm',
+            orderNumber: last.orderNumber || ''
+        });
+        alert('Last order details pulled from records.');
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col items-center p-2 animate-entrance overflow-y-auto pb-24">
-      <div className="w-full max-w-4xl mx-auto space-y-6">
+      <div className="w-full max-w-4xl mx-auto space-y-6 text-left">
         <div className="text-center">
           <h1 className="text-3xl font-black header-gradient uppercase tracking-tighter">EECOL Shipping Manifest Generator</h1>
           <p className="text-sm font-bold text-eecol-blue mt-1">Create professional reel labels for shipping with integrated hazardous materials documentation.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-xl border border-eecol-blue/10 space-y-6 text-left">
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest flex items-center gap-2">
-              <span>📏</span> Reel Dimensions
-            </h2>
-
-            <div className="space-y-4">
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Load Saved Specifications</label>
-                <select onChange={e => {
-                  const spec = savedSpecs.find(s => s.name === e.target.value);
-                  if (spec) setInputs({...inputs, coreD: spec.value.core, flangeD: spec.value.flange, traverseW: spec.value.width});
-                }} className="input-premium w-full font-bold bg-white dark:bg-slate-700">
-                  <option value="">-- Select Saved Specification --</option>
-                  {savedSpecs.map(s => <option key={s.name} value={s.name}>{s.name.replace('reelSpec_', '')}</option>)}
-                </select>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2">
+        <div className="shadow-xl rounded-3xl p-4 bg-white border border-gray-100">
+            <h3 className="text-lg font-bold mb-3 text-eecol-blue text-center uppercase">📏 Reel Dimensions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="text-[8px] font-black text-gray-500 uppercase ml-1">Core (in)</label>
-                  <input type="number" value={inputs.coreD} onChange={e => setInputs({...inputs, coreD: e.target.value})} className="input-premium w-full font-bold text-center" />
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Core Diameter</label>
+                    <div className="flex space-x-1">
+                        <input value={formData.coreDiameter} onChange={e => setFormData({...formData, coreDiameter: e.target.value})} placeholder="0" className="input-premium w-full text-sm font-bold" />
+                        <select value={formData.coreUnit} onChange={e => setFormData({...formData, coreUnit: e.target.value})} className="input-premium w-auto bg-white font-bold"><option value="in">in</option><option value="cm">cm</option></select>
+                    </div>
                 </div>
                 <div>
-                  <label className="text-[8px] font-black text-gray-500 uppercase ml-1">Flange (in)</label>
-                  <input type="number" value={inputs.flangeD} onChange={e => setInputs({...inputs, flangeD: e.target.value})} className="input-premium w-full font-bold text-center" />
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Flange Diameter</label>
+                    <div className="flex space-x-1">
+                        <input value={formData.flangeDiameter} onChange={e => setFormData({...formData, flangeDiameter: e.target.value})} placeholder="0" className="input-premium w-full text-sm font-bold" />
+                        <select value={formData.flangeUnit} onChange={e => setFormData({...formData, flangeUnit: e.target.value})} className="input-premium w-auto bg-white font-bold"><option value="in">in</option><option value="cm">cm</option></select>
+                    </div>
                 </div>
                 <div>
-                  <label className="text-[8px] font-black text-gray-500 uppercase ml-1">Traverse (in)</label>
-                  <input type="number" value={inputs.traverseW} onChange={e => setInputs({...inputs, traverseW: e.target.value})} className="input-premium w-full font-bold text-center" />
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Traverse Width</label>
+                    <div className="flex space-x-1">
+                        <input value={formData.traverseWidth} onChange={e => setFormData({...formData, traverseWidth: e.target.value})} placeholder="0" className="input-premium w-full text-sm font-bold" />
+                        <select value={formData.traverseUnit} onChange={e => setFormData({...formData, traverseUnit: e.target.value})} className="input-premium w-auto bg-white font-bold"><option value="in">in</option><option value="cm">cm</option></select>
+                    </div>
                 </div>
-              </div>
             </div>
+        </div>
 
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest flex items-center gap-2 pt-4">
-              <span>👤</span> Shipping Information
-            </h2>
-
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+        <div className="shadow-xl rounded-3xl p-4 bg-white border border-gray-100">
+            <h3 className="text-lg font-bold mb-3 text-eecol-blue text-center uppercase">👤 Shipping Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Order # / IBT #</label>
-                  <input value={inputs.orderNumber} onChange={e => setInputs({...inputs, orderNumber: e.target.value.toUpperCase()})} className="input-premium w-full font-bold" />
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Customer Name / Branch</label>
+                    <input value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value.toUpperCase()})} placeholder="EECOL CUSTOMER" className="input-premium w-full font-bold uppercase text-sm" />
                 </div>
                 <div>
-                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Date</label>
-                  <input type="date" value={inputs.date} onChange={e => setInputs({...inputs, date: e.target.value})} className="input-premium w-full font-bold" />
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Date</label>
+                    <input type="date" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} className="input-premium w-full font-bold text-sm" />
                 </div>
-              </div>
-
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Wire ID</label>
-                <input value={inputs.wireId} onChange={e => setInputs({...inputs, wireId: e.target.value.toUpperCase()})} className="input-premium w-full font-bold" placeholder="ACWU90 2/3 AL" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Amount</label>
-                  <div className="flex gap-2">
-                    <input type="number" value={inputs.amount} onChange={e => setInputs({...inputs, amount: Number(e.target.value)})} className="input-premium flex-1 font-bold" />
-                    <select value={inputs.amountUnit} onChange={e => setInputs({...inputs, amountUnit: e.target.value})} className="input-premium w-20 font-bold bg-white dark:bg-slate-700"><option value="m">m</option><option value="ft">ft</option></select>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Weight</label>
-                  <div className="flex gap-2">
-                    <input type="number" value={inputs.weight} onChange={e => setInputs({...inputs, weight: Number(e.target.value)})} className="input-premium flex-1 font-bold" />
-                    <select value={inputs.weightUnit} onChange={e => setInputs({...inputs, weightUnit: e.target.value})} className="input-premium w-24 font-bold bg-white dark:bg-slate-700"><option value="lbs">lbs</option><option value="kg">kg</option></select>
-                  </div>
-                </div>
-              </div>
             </div>
-
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest flex items-center gap-2 pt-4">
-              <span>📝</span> Additional Details
-            </h2>
-            <textarea value={inputs.customDetails} onChange={e => setInputs({...inputs, customDetails: e.target.value})} className="input-premium w-full font-bold h-24" placeholder="Add custom notes..." />
-
-            <div className="flex gap-2 pt-2">
-              <button onClick={autoPull} className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white font-black py-4 rounded-2xl text-[10px] uppercase shadow-inner">
-                Auto-pull Last Order
-              </button>
-              <button onClick={handlePrint} className="flex-1 bg-eecol-blue text-white font-black py-4 rounded-2xl btn-tactile uppercase shadow-lg text-[10px]">
-                🖨️ Print Reel Label
-              </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Wire ID</label>
+                    <input value={formData.wireId} onChange={e => setFormData({...formData, wireId: e.target.value.toUpperCase()})} placeholder="TK6/3CU" className="input-premium w-full font-bold uppercase text-sm" />
+                </div>
+                <div>
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Reel Amount</label>
+                    <div className="flex space-x-1">
+                        <input value={formData.targetAmount} onChange={e => setFormData({...formData, targetAmount: e.target.value})} placeholder="Quantity" className="input-premium w-full font-bold text-sm" />
+                        <select value={formData.targetAmountUnit} onChange={e => setFormData({...formData, targetAmountUnit: e.target.value})} className="input-premium w-auto bg-white font-bold"><option value="m">m</option><option value="ft">ft</option></select>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div className="hidden lg:block">
-             <div className="bg-white p-8 rounded-3xl shadow-2xl border-4 border-eecol-blue aspect-[1/1.4] flex flex-col">
-                <div className="border-b-4 border-eecol-blue pb-4 mb-6 flex justify-between items-center">
-                   <div className="text-3xl font-black text-eecol-blue">EECOL WIRE</div>
-                   <div className="text-right">
-                      <div className="text-[10px] font-black text-gray-400 uppercase">Shipping Label</div>
-                      <div className="text-lg font-black">{inputs.orderNumber || 'ORDER #'}</div>
-                   </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Order # / IBT #</label>
+                    <input value={formData.orderNumber} onChange={e => setFormData({...formData, orderNumber: e.target.value.toUpperCase()})} placeholder="1234567" maxLength={7} className="input-premium w-full font-bold uppercase text-sm" />
                 </div>
-
-                <div className="flex-1 space-y-8">
-                   <div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase">Wire Identification</div>
-                      <div className="text-2xl font-black border-b-2 border-slate-100 pb-2">{inputs.wireId || 'WIRE ID'}</div>
-                   </div>
-
-                   <div className="grid grid-cols-2 gap-8">
-                      <div>
-                         <div className="text-[10px] font-black text-gray-400 uppercase">Length</div>
-                         <div className="text-3xl font-black">{inputs.amount} {inputs.amountUnit}</div>
-                      </div>
-                      <div>
-                         <div className="text-[10px] font-black text-gray-400 uppercase">Total Weight</div>
-                         <div className="text-3xl font-black">{inputs.weight} {inputs.weightUnit}</div>
-                      </div>
-                   </div>
-
-                   <div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase">Reel Dimensions</div>
-                      <div className="text-sm font-bold flex gap-4">
-                         <span>Core: {inputs.coreD || '--'}"</span>
-                         <span>Flange: {inputs.flangeD || '--'}"</span>
-                         <span>Width: {inputs.traverseW || '--'}"</span>
-                      </div>
-                   </div>
-
-                   <div>
-                      <div className="text-[10px] font-black text-gray-400 uppercase">Additional Comments</div>
-                      <div className="text-xs font-medium bg-slate-50 p-4 rounded-xl min-h-[100px]">{inputs.customDetails}</div>
-                   </div>
+                <div>
+                    <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Weight</label>
+                    <div className="flex space-x-1">
+                        <input value={formData.weight} onChange={e => setFormData({...formData, weight: e.target.value})} placeholder="Full Weight" className="input-premium w-full font-bold text-sm" />
+                        <select value={formData.weightUnit} onChange={e => setFormData({...formData, weightUnit: e.target.value})} className="input-premium w-auto bg-white font-bold"><option value="lbs">lbs</option><option value="kg">kg</option></select>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div className="mt-auto pt-4 border-t-2 border-slate-100 flex justify-between items-center text-[10px] font-bold text-gray-400">
-                   <div>DATE: {inputs.date}</div>
-                   <div className="uppercase">EECOL Wire Tools Suite v0.9.0</div>
-                </div>
-             </div>
-          </div>
+        <div className="shadow-xl rounded-3xl p-4 bg-white border border-gray-100">
+            <h3 className="text-lg font-bold mb-3 text-eecol-blue text-center uppercase">📝 Additional Details</h3>
+            <textarea value={formData.customDetails} onChange={e => setFormData({...formData, customDetails: e.target.value})} placeholder="Special instructions..." className="input-premium w-full font-bold h-20 text-sm" />
+        </div>
+
+        <div className="pt-2 px-2 flex flex-col sm:flex-row gap-2">
+            <button onClick={handleAutoPull} className="flex-1 bg-blue-600 text-white font-bold py-3 px-4 rounded-3xl shadow-xl btn-tactile text-sm uppercase">📋 Auto-pull Last Order</button>
+            <button onClick={handlePrint} className="flex-1 bg-green-600 text-white font-bold py-3 px-4 rounded-3xl shadow-xl btn-tactile text-sm uppercase">🖨️ Print Reel Label</button>
         </div>
       </div>
     </div>

@@ -11,7 +11,8 @@ const WeightCalculator: React.FC = () => {
   const [inputs, setInputs] = useState({
     length: 500, lengthUnit: 'm',
     cableType: '', designation: '',
-    reelTare: 0, skidTare: 0
+    reelTare: 0, reelTareUnit: 'lbs',
+    skidTare: 0, skidTareUnit: 'lbs'
   });
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -19,106 +20,117 @@ const WeightCalculator: React.FC = () => {
     const unitWeight = WEIGHT_TABLE[inputs.cableType]?.[inputs.designation] || 0;
     const lenFt = inputs.lengthUnit === 'm' ? inputs.length * 3.28084 : inputs.length;
     const wireWeightLbs = (lenFt / 1000) * unitWeight;
-    const totalLbs = wireWeightLbs + inputs.reelTare + inputs.skidTare;
+
+    const reelLbs = inputs.reelTareUnit === 'kg' ? inputs.reelTare * 2.20462 : inputs.reelTare;
+    const skidLbs = inputs.skidTareUnit === 'kg' ? inputs.skidTare * 2.20462 : inputs.skidTare;
+
+    const totalLbs = wireWeightLbs + reelLbs + skidLbs;
 
     return { wireWeightLbs, totalLbs, unitWeight };
   }, [inputs]);
 
   return (
     <div className="flex-1 flex flex-col items-center p-2 animate-entrance overflow-y-auto pb-24">
-      <div className="w-full max-w-2xl mx-auto space-y-6">
+      <div className="w-full max-w-2xl mx-auto space-y-6 text-left">
         <div className="text-center">
           <h1 className="text-3xl font-black header-gradient uppercase tracking-tighter">EECOL Wire Weight Calculator</h1>
           <p className="text-sm font-bold text-eecol-blue mt-1">Estimate the weight of wire based on length and specifications.</p>
         </div>
 
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-xl border border-eecol-blue/10">
-          <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-4">Wire Specifications and Length</h2>
+        <div className="space-y-4">
+          <h3 className="text-lg font-bold text-eecol-blue mb-3 uppercase">Wire Specifications and Length</h3>
 
-          <div className="space-y-4 text-left">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Known Length</label>
-                <div className="flex gap-2">
-                  <input type="number" value={inputs.length} onChange={e => setInputs({...inputs, length: Number(e.target.value)})} className="input-premium flex-1 font-bold" />
-                  <select value={inputs.lengthUnit} onChange={e => setInputs({...inputs, lengthUnit: e.target.value})} className="input-premium w-24 font-bold bg-white dark:bg-slate-700">
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Known Length</label>
+            <div className="flex flex-col sm:flex-row sm:space-x-1 sm:space-y-0 space-y-1">
+                <input type="number" value={inputs.length} onChange={e => setInputs({...inputs, length: Number(e.target.value)})} className="input-premium flex-1 font-bold text-sm" />
+                <select value={inputs.lengthUnit} onChange={e => setInputs({...inputs, lengthUnit: e.target.value})} className="input-premium w-full sm:w-auto font-bold bg-white text-eecol-blue text-sm">
                     <option value="m">Meters (m)</option>
                     <option value="ft">Feet (ft)</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Cable Type</label>
-                <select value={inputs.cableType} onChange={e => setInputs({...inputs, cableType: e.target.value, designation: ''})} className="input-premium w-full font-bold bg-white dark:bg-slate-700">
-                  <option value="">-- Select Cable Type --</option>
-                  {Object.keys(WEIGHT_TABLE).map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
-              </div>
             </div>
+          </div>
 
-            <div>
-              <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Size / Conductor Count / Material</label>
-              <select value={inputs.designation} onChange={e => setInputs({...inputs, designation: e.target.value})} disabled={!inputs.cableType} className="input-premium w-full font-bold bg-white dark:bg-slate-700 disabled:opacity-50">
-                <option value="">-- Select Designation --</option>
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Cable Type</label>
+            <select value={inputs.cableType} onChange={e => setInputs({...inputs, cableType: e.target.value, designation: ''})} className="input-premium w-full font-bold bg-white text-eecol-blue text-sm">
+                <option value="">-- Select Cable Type --</option>
+                {Object.keys(WEIGHT_TABLE).map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Size / Conductor Count / Material</label>
+            <select value={inputs.designation} onChange={e => setInputs({...inputs, designation: e.target.value})} disabled={!inputs.cableType} className={`input-premium w-full font-bold bg-white text-eecol-blue text-sm ${!inputs.cableType && 'bg-gray-100 cursor-not-allowed'}`}>
+                <option value="">-- Select Designation (e.g., 14/3CU) --</option>
                 {inputs.cableType && Object.keys(WEIGHT_TABLE[inputs.cableType]).map(d => <option key={d} value={d}>{d}</option>)}
-              </select>
-            </div>
+            </select>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Reel Tare Weight (lbs)</label>
-                <input type="number" value={inputs.reelTare} onChange={e => setInputs({...inputs, reelTare: Number(e.target.value)})} className="input-premium w-full font-bold" placeholder="0" />
-              </div>
-              <div>
-                <label className="text-[10px] font-black text-gray-500 uppercase ml-1">Skid Tare Weight (lbs)</label>
-                <input type="number" value={inputs.skidTare} onChange={e => setInputs({...inputs, skidTare: Number(e.target.value)})} className="input-premium w-full font-bold" placeholder="0" />
-              </div>
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Reel/Drum Tare Weight</label>
+            <div className="flex flex-col sm:flex-row sm:space-x-1 sm:space-y-0 space-y-1">
+                <input type="number" value={inputs.reelTare} onChange={e => setInputs({...inputs, reelTare: Number(e.target.value)})} className="input-premium flex-1 font-bold text-sm" placeholder="0" />
+                <select value={inputs.reelTareUnit} onChange={e => setInputs({...inputs, reelTareUnit: e.target.value})} className="input-premium w-full sm:w-auto font-bold bg-white text-eecol-blue text-sm">
+                    <option value="lbs">lbs</option>
+                    <option value="kg">kg</option>
+                </select>
             </div>
+            <p className="text-[10px] text-gray-500 mt-1 italic">Enter weight of empty reel. Unit conversions are automatic.</p>
+          </div>
 
-            <div className="flex gap-2 pt-2">
-              <button onClick={() => setInputs({length: 0, lengthUnit: 'm', cableType: '', designation: '', reelTare: 0, skidTare: 0})} className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white font-black py-4 rounded-2xl text-xs uppercase">
-                Clear
-              </button>
-              <button onClick={() => setShowAdvanced(!showAdvanced)} className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white font-black py-4 rounded-2xl text-xs uppercase">
-                {showAdvanced ? 'Hide Advanced' : 'Advanced Settings'}
-              </button>
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <label className="block text-xs font-semibold mb-1 text-eecol-blue uppercase">Skid Tare Weight</label>
+            <div className="flex flex-col sm:flex-row sm:space-x-1 sm:space-y-0 space-y-1">
+                <input type="number" value={inputs.skidTare} onChange={e => setInputs({...inputs, skidTare: Number(e.target.value)})} className="input-premium flex-1 font-bold text-sm" placeholder="0" />
+                <select value={inputs.skidTareUnit} onChange={e => setInputs({...inputs, skidTareUnit: e.target.value})} className="input-premium w-full sm:w-auto font-bold bg-white text-eecol-blue text-sm">
+                    <option value="lbs">lbs</option>
+                    <option value="kg">kg</option>
+                </select>
             </div>
+            <p className="text-[10px] text-gray-500 mt-1 italic">Enter weight of empty skid. Unit conversions are automatic.</p>
+          </div>
+
+          <div className="pt-2 flex flex-col sm:flex-row gap-2">
+            <button className="flex-1 bg-eecol-blue text-white font-bold p-3 rounded-3xl shadow-xl btn-tactile text-sm uppercase">Calculate Total Weights</button>
+            <button onClick={() => setInputs({length: 500, lengthUnit: 'm', cableType: '', designation: '', reelTare: 0, reelTareUnit: 'lbs', skidTare: 0, skidTareUnit: 'lbs'})} className="sm:w-1/3 bg-gray-200 text-eecol-blue font-bold p-3 rounded-3xl shadow-xl btn-tactile text-sm uppercase">Clear</button>
+          </div>
+
+          <div className="shadow-xl rounded-3xl p-2 bg-white border border-gray-100">
+            <button onClick={() => setShowAdvanced(!showAdvanced)} className="w-full text-left font-semibold text-eecol-blue flex justify-between items-center py-2 px-2 hover:bg-blue-50 rounded-3xl transition duration-150">
+                <span className="text-sm">Advanced Settings</span>
+                <span className="text-lg">{showAdvanced ? '▼' : '►'}</span>
+            </button>
+            {showAdvanced && (
+                <div className="mt-3 p-3 bg-blue-50 border-l-4 border-eecol-blue animate-entrance">
+                    <p className="text-xs text-eecol-blue font-medium italic">🔬 Advanced settings for custom component specifications and engineering calculations are available in the full version.</p>
+                </div>
+            )}
           </div>
         </div>
 
-        {showAdvanced && (
-          <div className="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-3xl border-2 border-dashed border-slate-200 animate-entrance">
-            <h2 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">🔬 Component-Based Modeling (Pending Implementation)</h2>
-            <p className="text-[10px] text-slate-400 italic">Advanced engineering calculations for component-specific weights will be available in v1.0.</p>
-          </div>
-        )}
-
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-xl border border-eecol-blue/10 animate-entrance">
-          <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-4 text-center">Weight Analysis</h2>
-
-          <div className="space-y-4">
-            <div className="p-5 bg-red-50 dark:bg-red-900/20 rounded-3xl border-2 border-red-500 text-center shadow-inner">
-              <p className="text-[10px] font-black text-red-700 dark:text-red-400 uppercase mb-1">Total Shipment Weight (Wire + Reel + Skid)</p>
-              <p className="text-4xl font-black text-red-700 dark:text-white">{calculation.totalLbs.toFixed(1)} lbs</p>
-              <p className="text-xs text-red-600/70 font-bold">({(calculation.totalLbs * 0.453592).toFixed(1)} kg)</p>
+        <div className="mt-8">
+          <div className="p-4 bg-white border-l-8 border-eecol-blue rounded-3xl shadow-xl text-center space-y-4">
+            <div>
+                <p className="text-sm font-medium text-gray-700 uppercase">Total Shipment Weight (Wire + Reel + Skid)</p>
+                <p className="text-4xl font-extrabold mt-1 text-red-600">{calculation.totalLbs.toFixed(1)} lbs</p>
+                <p className="text-md font-semibold mt-1 text-red-400">({(calculation.totalLbs * 0.453592).toFixed(1)} kg)</p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-200 text-center">
-                <p className="text-[8px] font-black text-blue-700 uppercase mb-1">Estimated Wire Weight Only</p>
-                <p className="text-xl font-black text-blue-800 dark:text-white">{calculation.wireWeightLbs.toFixed(1)} lbs</p>
-              </div>
-              <div className="p-4 bg-slate-50 dark:bg-slate-900/20 rounded-2xl border border-slate-200 text-center">
-                <p className="text-[8px] font-black text-slate-700 uppercase mb-1">Unit Weight (Approx.)</p>
-                <p className="text-xl font-black text-slate-800 dark:text-white">{calculation.unitWeight || '--'}</p>
-              </div>
+            <div className="mt-4 pt-2 border-t border-gray-200">
+                <p className="text-sm font-medium text-eecol-blue uppercase">Estimated Wire Weight Only</p>
+                <p className="text-2xl font-bold mt-1 text-eecol-blue">{calculation.wireWeightLbs.toFixed(1)} lbs</p>
+                <p className="text-sm font-semibold mt-1 text-gray-700">({(calculation.wireWeightLbs * 0.453592).toFixed(1)} kg)</p>
             </div>
-          </div>
 
-          <div className="mt-6 flex gap-2">
-            <button onClick={() => window.print()} className="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-white font-black py-3 rounded-xl text-[10px] uppercase">
-              Print Results
-            </button>
+            <div className="mt-3 pt-2 border-t border-gray-200">
+                <p className="text-xs font-semibold text-gray-700 uppercase">Unit Weight (Approx.)</p>
+                <p className="text-lg font-bold text-blue-700">{calculation.unitWeight || '--'} lbs/1000ft</p>
+            </div>
+
+            <p className="text-[10px] text-gray-700 italic">Weight calculations use a standard conversion factor.</p>
+
+            <button onClick={() => window.print()} className="w-full bg-eecol-blue text-white font-bold py-2 rounded-3xl text-sm btn-tactile shadow-xl">Print Results</button>
           </div>
         </div>
       </div>
