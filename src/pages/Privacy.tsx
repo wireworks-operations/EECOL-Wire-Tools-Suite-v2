@@ -2,38 +2,51 @@ import React from 'react';
 
 const Privacy: React.FC = () => {
   return (
-    <div className="flex-1 flex flex-col overflow-hidden animate-entrance p-4">
-      <div className="max-w-2xl mx-auto w-full bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-eecol-blue/10">
-        <h1 className="text-3xl font-black header-gradient mb-6 uppercase text-center">Privacy Policy</h1>
-
-        <div className="space-y-6 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-          <section>
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-2">Data Sovereignty</h2>
-            <p>
-              The EECOL Wire Tools Suite is built on a <span className="font-bold text-gray-900 dark:text-white">Local-First</span> architecture.
-              This means all your data (cutting records, inventory, settings) is stored exclusively in your browser's local storage (IndexedDB).
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-2">Information We Do Not Collect</h2>
-            <p>
-              We do not use any tracking cookies, analytics scripts, or external databases. We do not have access to your records, customer names, or operational data.
-              Your data never leaves your device unless you explicitly perform an export or manual backup.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-[10px] font-black text-eecol-blue dark:text-blue-400 uppercase tracking-widest mb-2">Cloud Sync & P2P</h2>
-            <p>
-              Future synchronization features will utilize end-to-end encrypted peer-to-peer protocols. No central server will ever store your unencrypted operational data.
-            </p>
-          </section>
-
-          <div className="pt-6 border-t border-gray-100 dark:border-slate-700 text-[10px] text-center font-bold text-gray-400 uppercase">
-            Effective Date: January 1, 2025 | Version 0.8.0.4
-          </div>
+    <div className="flex-1 flex flex-col items-center p-2 animate-entrance overflow-y-auto pb-24 text-left">
+      <div className="w-full max-w-7xl mx-auto space-y-6">
+        <div className="text-center">
+            <h1 className="text-3xl font-black mb-3 header-gradient uppercase tracking-tighter">Privacy & Security Policy</h1>
+            <p className="mb-5 text-sm font-medium text-eecol-blue">How we protect your data and ensure compliance with privacy regulations.</p>
         </div>
+
+        <section className="p-6 bg-green-50 border border-green-200 rounded-3xl shadow-xl">
+            <h2 className="text-xl font-bold text-green-800 mb-4 uppercase">🚀 Version 0.8.0.0 - Enterprise Privacy Update</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="bg-white p-3 rounded border">
+                    <h4 className="font-semibold text-green-700 mb-1">🛡️ Enterprise Security</h4>
+                    <p className="text-green-600">No third-party backends - complete independence</p>
+                </div>
+                <div className="bg-white p-3 rounded border">
+                    <h4 className="font-semibold text-green-700 mb-1">📱 PWA Control</h4>
+                    <p className="text-green-600">Installable app with offline capabilities</p>
+                </div>
+            </div>
+        </section>
+
+        <section className="p-6 bg-white rounded-3xl shadow-xl border border-gray-100">
+            <h2 className="text-xl font-bold text-eecol-blue mb-4 uppercase">🛡️ Privacy Commitment</h2>
+            <p className="text-sm text-gray-700 mb-4 italic">The EECOL Wire Tools Suite v0.9.0 prioritizes enterprise-grade privacy and data security. Your data remains under your control within trusted networks.</p>
+            <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-eecol-blue uppercase">📊 No External Data Collection</h3>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-2">
+                    <li>✅ No personal information collected (name, email, IP address)</li>
+                    <li>✅ No analytics or tracking technologies</li>
+                    <li>✅ No third-party data sharing or backend services</li>
+                </ul>
+            </div>
+        </section>
+
+        <section className="p-6 bg-white rounded-3xl shadow-xl border border-gray-100">
+            <h2 className="text-xl font-bold text-eecol-blue mb-4 uppercase">💾 Local Data Storage</h2>
+            <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-eecol-blue uppercase">Enterprise Storage Policy</h3>
+                <ul className="list-disc list-inside text-sm text-gray-700 space-y-2">
+                    <li>✅ All data stored in browser IndexedDB with full data integrity</li>
+                    <li>✅ Data accessible only within your local machine/network</li>
+                    <li>✅ Comprehensive data export/import and backup capabilities</li>
+                </ul>
+            </div>
+        </section>
       </div>
     </div>
   );

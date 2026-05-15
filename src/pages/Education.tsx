@@ -1,64 +1,67 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Education: React.FC = () => {
-  const categories = [
-    {
-      title: 'Wire Tools Foundation',
-      description: 'Essential knowledge for cable management and tool operation.',
-      links: ['Core Principles', 'Safety Standards', 'Efficiency Tips']
-    },
-    {
-      title: 'Engineering Reference',
-      description: 'Technical specifications, conversion charts, and wire properties.',
-      links: ['Conductor Data', 'Insulation Ratings', 'NEC/CEC References']
-    },
-    {
-      title: 'Learning Hub',
-      description: 'Video tutorials and step-by-step guides for tool modules.',
-      links: ['Calculator Tutorials', 'Database Management', 'Reports Guide']
-    }
-  ];
-
   return (
-    <div className="flex-1 flex flex-col overflow-hidden animate-entrance p-4">
-      <div className="max-w-4xl mx-auto w-full">
-        <h1 className="text-3xl font-black text-center header-gradient mb-2 uppercase">Education Center</h1>
-        <p className="text-center text-gray-600 dark:text-gray-400 mb-8 font-medium">Professional development and technical resources for wire operations.</p>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {categories.map((cat, i) => (
-            <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl border border-eecol-blue/10 hover:border-eecol-blue/40 transition-all group">
-              <div className="w-12 h-12 bg-eecol-blue/10 rounded-xl flex items-center justify-center text-eecol-blue mb-4 group-hover:scale-110 transition-transform">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+    <div className="flex-1 flex flex-col items-center p-2 animate-entrance overflow-y-auto pb-24 text-left">
+      <div className="w-full max-w-7xl mx-auto space-y-8">
+        <div className="bg-white/70 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/20 text-center relative overflow-hidden">
+            <div className="flex justify-center mb-6">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-eecol-blue drop-shadow-xl eecol-logo-tilt">
+                    <circle cx="12" cy="12" r="11.35" fill="white" stroke="currentColor" strokeWidth="2"/>
+                    <rect x="4" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+                    <path d="M 8,6.5 C 12,5.5 16,7.5 20,6.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
+                    <path d="M 8,12 C 12,11 16,13 20,12" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
+                    <path d="M 8,17.5 C 12,16.5 16,18.5 20,17.5" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/>
                 </svg>
-              </div>
-              <h3 className="text-lg font-black header-gradient uppercase mb-2">{cat.title}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 h-12 overflow-hidden">{cat.description}</p>
-              <ul className="space-y-2">
-                {cat.links.map((link, j) => (
-                  <li key={j}>
-                    <button className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase hover:underline flex items-center gap-1">
-                      <span>•</span> {link}
-                    </button>
-                  </li>
-                ))}
-              </ul>
             </div>
-          ))}
+            <h1 className="text-4xl sm:text-5xl font-black mb-4 header-gradient uppercase tracking-tighter">EECOL Learning Hub</h1>
+            <p className="text-lg text-gray-700 font-medium mb-2">Professional Wire Tools Education Platform</p>
+            <p className="text-base text-eecol-blue font-semibold opacity-90 uppercase">Master cutting excellence through theory, tools, and best practices</p>
         </div>
 
-        <div className="mt-12 p-8 bg-eecol-blue rounded-3xl text-white shadow-2xl relative overflow-hidden">
-          <div className="relative z-10">
-            <h2 className="text-2xl font-black mb-2 uppercase">Knowledge Base</h2>
-            <p className="text-blue-100 mb-6 max-w-lg">Can't find what you're looking for? Explore our comprehensive technical documentation and FAQ.</p>
-            <button className="bg-white text-eecol-blue font-black py-3 px-8 rounded-xl text-xs uppercase hover:bg-blue-50 transition-colors">Search Knowledge Base</button>
-          </div>
-          <div className="absolute top-0 right-0 p-4 opacity-10">
-            <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor">
-               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-            </svg>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 space-y-4 hover:-translate-y-2 transition-transform">
+                <div className="text-5xl text-center">📚</div>
+                <h2 className="text-xl font-bold text-eecol-blue text-center uppercase">Wire Tools Foundation</h2>
+                <p className="text-xs text-gray-600 text-center">Comprehensive guide to all suite calculators, features, and usage instructions.</p>
+                <div className="bg-blue-50 p-3 rounded-3xl text-[10px] space-y-1">
+                    <div className="font-bold text-blue-700 uppercase">Includes:</div>
+                    <div className="text-gray-600">• Tool descriptions</div>
+                    <div className="text-gray-600">• Usage instructions</div>
+                    <div className="text-gray-600">• Best practices</div>
+                </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 space-y-4 opacity-60">
+                <div className="text-5xl text-center">✂️</div>
+                <h2 className="text-xl font-bold text-gray-500 text-center uppercase">Precision Cutting</h2>
+                <p className="text-xs text-gray-500 text-center italic">Advanced techniques for mark consistency and multi-cut optimization.</p>
+                <div className="text-center"><span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-[9px] font-black uppercase">Coming Soon</span></div>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 space-y-4">
+                <div className="text-5xl text-center">🧮</div>
+                <h2 className="text-xl font-bold text-eecol-blue text-center uppercase">Engineering Reference</h2>
+                <p className="text-xs text-gray-600 text-center">Advanced mathematics for cable reel capacity and volumetric weight estimation.</p>
+                <Link to="/advanced-math" className="block text-center text-[10px] font-black text-blue-600 uppercase hover:underline">View Formulas →</Link>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 space-y-4">
+                <div className="text-5xl text-center">🏠</div>
+                <h2 className="text-xl font-bold text-eecol-blue text-center uppercase">Back to Tools</h2>
+                <p className="text-xs text-gray-600 text-center">Return to the main suite for calculators, records, and planning tools.</p>
+                <Link to="/" className="block text-center py-2 bg-eecol-blue text-white rounded-3xl text-[10px] font-black uppercase shadow-xl">Main Suite</Link>
+            </div>
+        </div>
+
+        <div className="mx-4 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-3xl shadow-2xl border border-white text-center space-y-6">
+            <h2 className="text-3xl font-bold text-eecol-blue uppercase tracking-tight">🚀 Ready to Use Your Tools?</h2>
+            <p className="text-gray-700 max-w-2xl mx-auto">Return to the EECOL Wire Tools Suite for professional calculators, inventory management, and cutting operations.</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link to="/cutting-records" className="px-6 py-3 bg-white border-2 border-eecol-blue text-eecol-blue font-bold rounded-3xl shadow-xl hover:bg-eecol-blue hover:text-white transition-all uppercase text-sm no-underline">📊 Start Cutting Records</Link>
+                <Link to="/inventory-records" className="px-6 py-3 bg-white border-2 border-eecol-blue text-eecol-blue font-bold rounded-3xl shadow-xl hover:bg-eecol-blue hover:text-white transition-all uppercase text-sm no-underline">📦 Start Inventory Records</Link>
+            </div>
         </div>
       </div>
     </div>

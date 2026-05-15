@@ -83,7 +83,7 @@ const ImportReelModal: React.FC<ImportReelModalProps> = ({ isOpen, onClose, onIm
             <button
               onClick={handleImport}
               disabled={!selectedId}
-              className="w-full bg-eecol-blue text-white font-bold py-2 rounded-xl text-[10px] uppercase btn-tactile disabled:opacity-50"
+              className="w-full bg-eecol-blue text-white font-bold py-2 rounded-3xl text-[10px] uppercase btn-tactile disabled:opacity-50"
             >
               Import Flange Size
             </button>

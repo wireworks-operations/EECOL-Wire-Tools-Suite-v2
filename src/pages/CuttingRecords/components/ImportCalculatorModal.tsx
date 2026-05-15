@@ -93,7 +93,7 @@ const ImportCalculatorModal: React.FC<ImportCalculatorModalProps> = ({ isOpen, o
             <button
               onClick={handleImportMark}
               disabled={!selectedMarkId}
-              className="w-full bg-eecol-blue text-white font-bold py-2 rounded-xl text-[10px] uppercase btn-tactile disabled:opacity-50"
+              className="w-full bg-eecol-blue text-white font-bold py-2 rounded-3xl text-[10px] uppercase btn-tactile disabled:opacity-50"
             >
               Import Marks
             </button>
@@ -116,7 +116,7 @@ const ImportCalculatorModal: React.FC<ImportCalculatorModalProps> = ({ isOpen, o
             <button
               onClick={handleImportStop}
               disabled={!selectedStopId}
-              className="w-full bg-purple-600 text-white font-bold py-2 rounded-xl text-[10px] uppercase btn-tactile disabled:opacity-50"
+              className="w-full bg-purple-600 text-white font-bold py-2 rounded-3xl text-[10px] uppercase btn-tactile disabled:opacity-50"
             >
               Import Stop Marks
             </button>
