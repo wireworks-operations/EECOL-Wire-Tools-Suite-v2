@@ -37,7 +37,7 @@ const CuttingRecords: React.FC = () => {
     lineCode: '', turnedToLineCode: '', cutterName: localStorage.getItem('cutterName') || '',
     coilOrReel: 'coil', chargeable: 'no', isFullPick: false, isNoMarks: false, isSystemCut: false,
     startingMark: null, startingMarkUnit: 'm', endingMark: null, isCutInSystem: false,
-    orderComments: '', reelSize: null
+    orderComments: '', reelSize: undefined
   };
   const [formData, setFormData] = useState<Partial<CuttingRecord>>(initialForm);
   const [editingId, setEditingId] = useState<string | null>(null);
