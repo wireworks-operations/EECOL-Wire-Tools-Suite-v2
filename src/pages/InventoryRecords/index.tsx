@@ -4,7 +4,7 @@ import { InventoryRecord } from '../../types/database';
 import InventoryItem from './components/InventoryItem';
 import InventoryStats from './components/InventoryStats';
 import { calculateInventoryStats } from './utils/logic';
-import { exportToCSV } from '../CuttingRecords/utils/export';
+import { exportInventoryToCSV } from './utils/export';
 
 const InventoryRecords: React.FC = () => {
   const { db, isReady } = useDatabase();
@@ -289,7 +289,7 @@ const InventoryRecords: React.FC = () => {
 
           {showDataControls && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 animate-entrance p-2">
-              <button onClick={() => exportToCSV(items)} className="bg-blue-600 text-white text-[10px] font-bold py-3 rounded-xl btn-tactile shadow-lg uppercase">Export All CSV</button>
+              <button onClick={() => exportInventoryToCSV(items)} className="bg-blue-600 text-white text-[10px] font-bold py-3 rounded-xl btn-tactile shadow-lg uppercase">Export All CSV</button>
               <button onClick={async () => {if(confirm('Clear ALL inventory records?')){setItems([]); await db!.clear('inventoryRecords');}}} className="bg-red-600 text-white text-[10px] font-bold py-3 rounded-xl btn-tactile shadow-lg uppercase">Clear All Records</button>
             </div>
           )}

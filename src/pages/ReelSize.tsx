@@ -62,7 +62,7 @@ const ReelSize: React.FC = () => {
             flange: bestDf, core: bestDc, width: bestW,
             capacity: calculateCapacity(toMeters(bestDf, 'in'), toMeters(bestDc, 'in'), toMeters(bestW, 'in'), fM, dM, inputs.efficiency).workingLength
         },
-        reels: recommendations.sort((a,b) => a.capacity - b.capacity)
+        reels: recommendations.sort((a,b) => (a.capacity || 0) - (b.capacity || 0))
     });
   };
 

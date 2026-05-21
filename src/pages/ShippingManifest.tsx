@@ -18,7 +18,7 @@ const ShippingManifest: React.FC = () => {
 
   const handleAutoPull = async () => {
     if (!db) return;
-    const records = await db.getAll('cuttingRecords');
+    const records = await db.getAll<any>('cuttingRecords');
     if (records.length > 0) {
         const last = records.sort((a: any, b: any) => b.timestamp - a.timestamp)[0];
         setFormData({
