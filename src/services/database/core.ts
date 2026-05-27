@@ -147,4 +147,28 @@ export class EECOLIndexedDB {
       request.onerror = () => reject(request.error);
     });
   }
+
+  /**
+   * Performs an atomic batch update on a specific store.
+   * Wraps all operations in a single transaction for atomicity and performance.
+   */
+  async bulkPut<T>(storeName: string, items: T[], clearFirst = false): Promise<void> {
+    await this.isReady();
+    return new Promise((resolve, reject) => {
+      const transaction = this.db!.transaction([storeName], 'readwrite', { durability: 'relaxed' });
+      const store = transaction.objectStore(storeName);
+
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = () => reject(transaction.error);
+      transaction.onabort = () => reject(new Error(`Transaction aborted for store: ${storeName}`));
+
+      if (clearFirst) {
+        store.clear();
+      }
+
+      for (const item of items) {
+        store.put(item);
+      }
+    });
+  }
 }
