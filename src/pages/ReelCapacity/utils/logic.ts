@@ -1,5 +1,4 @@
-export const METERS_TO_FEET = 3.280839895;
-export const INCHES_TO_METERS = 0.0254;
+import { REEL_FACTOR_CONSTANT, METERS_TO_FEET, INCHES_TO_METERS } from '../../../utils/engineering';
 
 export const toMeters = (value: number, unit: string): number => {
   switch (unit) {
@@ -39,7 +38,7 @@ export const calculateCapacity = (df: number, dc: number, w: number, f: number, 
   const w_in = w / INCHES_TO_METERS;
   const d_in = d / INCHES_TO_METERS;
 
-  const reelFactor = (h_in + dc_in) * h_in * w_in * 0.262;
+  const reelFactor = (h_in + dc_in) * h_in * w_in * REEL_FACTOR_CONSTANT;
   const maxCapacityFt = reelFactor / (d_in * d_in);
 
   const totalLengthFt = maxCapacityFt * efficiency;
