@@ -1,5 +1,7 @@
 import { REEL_FACTOR_CONSTANT, METERS_TO_FEET, INCHES_TO_METERS } from '../../../utils/engineering';
 
+export { METERS_TO_FEET };
+
 export const toMeters = (value: number, unit: string): number => {
   switch (unit) {
     case 'in': return value * INCHES_TO_METERS;
