@@ -149,6 +149,29 @@ export class EECOLIndexedDB {
   }
 
   /**
+   * Deletes the entire database.
+   */
+  static async deleteDatabase(): Promise<void> {
+    const dbName = 'EECOLTools_v2';
+    if (EECOLIndexedDB.instance && EECOLIndexedDB.instance.db) {
+      EECOLIndexedDB.instance.db.close();
+      EECOLIndexedDB.instance.db = null;
+    }
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.deleteDatabase(dbName);
+      request.onsuccess = () => {
+        EECOLIndexedDB.instance = null;
+        resolve();
+      };
+      request.onerror = () => reject(request.error);
+      request.onblocked = () => {
+        console.warn('Delete database blocked. Please close all other tabs.');
+        reject(new Error('Delete database blocked'));
+      };
+    });
+  }
+
+  /**
    * Performs an atomic batch update on a specific store.
    * Wraps all operations in a single transaction for atomicity and performance.
    */

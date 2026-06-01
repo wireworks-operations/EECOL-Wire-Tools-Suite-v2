@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDatabase } from '../../hooks/useDatabase';
+import { EECOLIndexedDB } from '../../services/database/core';
 
 const DatabaseConfig: React.FC = () => {
   const { db, isReady } = useDatabase();
@@ -33,22 +34,22 @@ const DatabaseConfig: React.FC = () => {
             <p className="mb-4 text-sm font-medium text-eecol-blue">Manage your local application data.</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-eecol-blue mb-6">
+        <div className="bg-white p-6 rounded-3xl shadow-xl border-l-4 border-eecol-blue mb-6">
             <h2 className="text-xl font-bold text-eecol-blue mb-4 flex items-center uppercase">📊 Database Statistics Dashboard</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-3xl border border-blue-200">
                     <p className="text-sm font-medium text-blue-600 uppercase">Total Records</p>
                     <p className="text-2xl font-bold text-blue-800">{stats.total}</p>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-3xl border border-green-200">
                     <p className="text-sm font-medium text-green-600 uppercase">Database Status</p>
                     <p className="text-2xl font-bold text-green-800">HEALTHY</p>
                 </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="bg-gray-50 p-4 rounded-lg">
+                <div className="bg-gray-50 p-4 rounded-3xl">
                     <h3 className="text-lg font-semibold text-eecol-blue mb-3 uppercase">📈 Record Breakdown</h3>
                     <div className="space-y-2 text-sm font-bold">
                         <div className="flex justify-between"><span>Cutting Records:</span> <span className="text-eecol-blue">{stats.cutting}</span></div>
@@ -60,12 +61,12 @@ const DatabaseConfig: React.FC = () => {
             </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-eecol-blue">
+        <div className="bg-white p-6 rounded-3xl shadow-xl border-l-4 border-eecol-blue">
             <h2 className="text-xl font-bold text-eecol-blue mb-4 uppercase">Database Management</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button className="px-4 py-2 bg-green-500 text-white font-bold rounded-lg shadow-md btn-tactile uppercase text-xs">Export to JSON</button>
-                <button className="px-4 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md btn-tactile uppercase text-xs">Import from JSON</button>
-                <button onClick={async () => {if(confirm('Delete entire database?')){await indexedDB.deleteDatabase('EECOLTools_v2'); window.location.reload();}}} className="px-4 py-2 bg-red-500 text-white font-bold rounded-lg shadow-md btn-tactile uppercase text-xs">Delete Database</button>
+                <button className="px-4 py-2 bg-green-500 text-white font-bold rounded-3xl shadow-md btn-tactile uppercase text-xs">Export to JSON</button>
+                <button className="px-4 py-2 bg-blue-500 text-white font-bold rounded-3xl shadow-md btn-tactile uppercase text-xs">Import from JSON</button>
+                <button onClick={async () => {if(confirm('Delete entire database?')){await EECOLIndexedDB.deleteDatabase(); window.location.reload();}}} className="px-4 py-2 bg-red-500 text-white font-bold rounded-3xl shadow-md btn-tactile uppercase text-xs">Delete Database</button>
             </div>
         </div>
       </div>
