@@ -156,36 +156,36 @@ const CuttingRecords: React.FC = () => {
            <div className="bg-white p-4 rounded-3xl shadow-xl space-y-4 border border-gray-100">
               <div className="grid grid-cols-1 gap-4">
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Number / IBT Number</label>
-                  <input value={formData.orderNumber} onChange={e => setFormData({...formData, orderNumber: e.target.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 7).toUpperCase()})} className="input-premium w-full font-bold uppercase" maxLength={7} placeholder="1234567" disabled={formData.isSystemCut} />
-                  <label className="inline-flex items-center mt-2 cursor-pointer">
-                    <input type="checkbox" checked={batchMode} onChange={e => setBatchMode(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 rounded" />
+                  <label htmlFor="orderNumber" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Number / IBT Number</label>
+                  <input id="orderNumber" value={formData.orderNumber} onChange={e => setFormData({...formData, orderNumber: e.target.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 7).toUpperCase()})} className="input-premium w-full font-bold uppercase" maxLength={7} placeholder="1234567" disabled={formData.isSystemCut} aria-required={!formData.isSystemCut} />
+                  <label htmlFor="batchMode" className="inline-flex items-center mt-2 cursor-pointer">
+                    <input id="batchMode" type="checkbox" checked={batchMode} onChange={e => setBatchMode(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 rounded" />
                     <span className="ml-2 text-[10px] font-bold header-gradient uppercase">Batch Entry Mode (Multiple Cuts)</span>
                   </label>
                 </div>
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Customer / Branch</label>
-                  <input value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EECOL BRANCH" disabled={formData.isSystemCut} />
+                  <label htmlFor="customerName" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Customer / Branch</label>
+                  <input id="customerName" value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EECOL BRANCH" disabled={formData.isSystemCut} aria-required={!formData.isSystemCut} />
                 </div>
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Comments</label>
-                  <input value={formData.orderComments} onChange={e => setFormData({...formData, orderComments: e.target.value})} className="input-premium w-full font-bold uppercase text-[10px]" placeholder="E.G. OVER SHIPMENT" />
+                  <label htmlFor="orderComments" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Comments</label>
+                  <input id="orderComments" value={formData.orderComments} onChange={e => setFormData({...formData, orderComments: e.target.value})} className="input-premium w-full font-bold uppercase text-[10px]" placeholder="E.G. OVER SHIPMENT" />
                 </div>
 
                 {!batchMode && (
                   <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100 animate-entrance">
-                    <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Wire Type / ID</label>
-                    <input value={formData.wireId} onChange={e => setFormData({...formData, wireId: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="ACWU90 6/3 AL" />
+                    <label htmlFor="wireId" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Wire Type / ID</label>
+                    <input id="wireId" value={formData.wireId} onChange={e => setFormData({...formData, wireId: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="ACWU90 6/3 AL" aria-required="true" />
                   </div>
                 )}
 
                 {!batchMode && <SingleCutForm formData={formData} setFormData={setFormData} onImportCalculator={() => setImportCalcOpen(true)} onImportReel={() => setImportReelOpen(true)} />}
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Cutter Name</label>
-                  <input value={formData.cutterName} onChange={e => setFormData({...formData, cutterName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EMPLOYEE NAME" />
+                  <label htmlFor="cutterName" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Cutter Name</label>
+                  <input id="cutterName" value={formData.cutterName} onChange={e => setFormData({...formData, cutterName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EMPLOYEE NAME" aria-required="true" />
                 </div>
               </div>
 
@@ -203,8 +203,10 @@ const CuttingRecords: React.FC = () => {
 
         <div className="bg-white p-4 rounded-3xl shadow-xl border border-gray-100 mb-6 space-y-4">
            <div className="flex flex-wrap gap-2">
-              <input value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search records..." className="input-premium flex-1 font-bold text-xs uppercase" />
-              <select value={filterField} onChange={e => setFilterField(e.target.value)} className="input-premium w-32 font-bold bg-white text-[10px] uppercase">
+              <label htmlFor="searchTerm" className="sr-only">Search records</label>
+              <input id="searchTerm" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Search records..." className="input-premium flex-1 font-bold text-xs uppercase" />
+              <label htmlFor="filterField" className="sr-only">Filter field</label>
+              <select id="filterField" value={filterField} onChange={e => setFilterField(e.target.value)} className="input-premium w-32 font-bold bg-white text-[10px] uppercase">
                  <option value="all">All Fields</option>
                  <option value="wireId">Wire ID</option>
                  <option value="orderNumber">Order #</option>
@@ -213,16 +215,18 @@ const CuttingRecords: React.FC = () => {
               </select>
            </div>
            <div className="flex flex-wrap gap-2">
-              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="input-premium flex-1 font-bold text-xs" />
-              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="input-premium flex-1 font-bold text-xs" />
+              <label htmlFor="dateFrom" className="sr-only">Date From</label>
+              <input id="dateFrom" type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="input-premium flex-1 font-bold text-xs" />
+              <label htmlFor="dateTo" className="sr-only">Date To</label>
+              <input id="dateTo" type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="input-premium flex-1 font-bold text-xs" />
               <button onClick={() => {setSearchTerm(''); setDateFrom(''); setDateTo('');}} className="bg-blue-600 text-white text-[10px] font-bold px-4 py-2 rounded-xl btn-tactile uppercase shadow-lg">Clear Filters</button>
            </div>
         </div>
 
         <div className="mb-6 space-y-2">
           <div className="p-3 bg-blue-50/70 border-l-4 border-blue-500 rounded-2xl shadow-md">
-            <label className="flex items-center gap-2 cursor-pointer ml-1">
-                <input type="checkbox" checked={showDataControls} onChange={e => setShowDataControls(e.target.checked)} className="w-4 h-4 rounded" />
+            <label htmlFor="showDataControls" className="flex items-center gap-2 cursor-pointer ml-1">
+                <input id="showDataControls" type="checkbox" checked={showDataControls} onChange={e => setShowDataControls(e.target.checked)} className="w-4 h-4 rounded" />
                 <span className="text-[10px] font-bold header-gradient uppercase">Show Data Management Controls</span>
             </label>
           </div>

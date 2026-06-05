@@ -15,9 +15,9 @@ interface StatsProps {
 
 const QuickStats: React.FC<StatsProps> = ({ stats, isOpen, onToggle }) => (
   <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-700 border border-blue-200 dark:border-blue-900 rounded-3xl shadow-xl mb-4">
-    <button onClick={onToggle} className="w-full text-left font-semibold text-blue-800 dark:text-blue-300 flex justify-between items-center text-sm">
-      📊 Quick Statistics
-      <span>{isOpen ? '▼' : '►'}</span>
+    <button onClick={onToggle} aria-expanded={isOpen} aria-label="Toggle Quick Statistics" className="w-full text-left font-semibold text-blue-800 dark:text-blue-300 flex justify-between items-center text-sm">
+      <span>📊 Quick Statistics</span>
+      <span aria-hidden="true">{isOpen ? '▼' : '►'}</span>
     </button>
     {isOpen && (
       <div className="mt-2 text-[10px] space-y-1">

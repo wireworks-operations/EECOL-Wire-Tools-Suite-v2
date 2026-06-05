@@ -27,9 +27,9 @@ const WireCutList: React.FC<WireCutListProps> = ({ items, isOpen, onToggle, onAu
 
   return (
     <div className="p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-slate-800 dark:to-amber-900/20 border border-yellow-200 dark:border-yellow-900 rounded-3xl shadow-xl mb-6">
-      <button onClick={onToggle} className="w-full text-left font-semibold text-yellow-800 dark:text-yellow-300 flex justify-between items-center text-sm">
+      <button onClick={onToggle} aria-expanded={isOpen} aria-label="Toggle Wire Cut List" className="w-full text-left font-semibold text-yellow-800 dark:text-yellow-300 flex justify-between items-center text-sm">
         <span>🗂️ Wire Cut List</span>
-        <span>{isOpen ? '▼' : '►'}</span>
+        <span aria-hidden="true">{isOpen ? '▼' : '►'}</span>
       </button>
       {isOpen && (
         <div className="mt-2 text-xs space-y-2">
