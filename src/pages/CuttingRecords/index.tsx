@@ -10,6 +10,7 @@ import ImportCalculatorModal from './components/ImportCalculatorModal';
 import ImportReelModal from './components/ImportReelModal';
 import { calculateStats, filterRecords } from './utils/logic';
 import { exportToCSV } from './utils/export';
+import { normalizeOrderNumber, normalizeId } from '../../utils/stewardship';
 
 const CuttingRecords: React.FC = () => {
   const { db, isReady } = useDatabase();
@@ -90,10 +91,10 @@ const CuttingRecords: React.FC = () => {
       timestamp: editingId ? records.find(r => r.id === editingId)!.timestamp : Date.now(),
       createdAt: editingId ? records.find(r => r.id === editingId)!.createdAt : Date.now(),
       updatedAt: Date.now(),
-      orderNumber: formData.orderNumber?.toUpperCase() || '',
-      customerName: formData.customerName?.toUpperCase() || '',
-      wireId: formData.wireId?.toUpperCase() || '',
-      cutterName: formData.cutterName?.toUpperCase() || '',
+      orderNumber: normalizeOrderNumber(formData.orderNumber || ''),
+      customerName: normalizeId(formData.customerName),
+      wireId: normalizeId(formData.wireId),
+      cutterName: normalizeId(formData.cutterName),
     };
 
     await db!.put('cuttingRecords', record);
@@ -145,8 +146,14 @@ const CuttingRecords: React.FC = () => {
         <QuickStats stats={stats} isOpen={statsOpen} onToggle={() => setStatsOpen(!statsOpen)} />
         <WireCutList items={wireList} isOpen={wireListOpen} onToggle={() => setWireListOpen(!wireListOpen)} onRefresh={loadAllData} onAutoFill={item => {
             setBatchMode(false);
-            setFormData(prev => ({...prev, orderNumber: item.orderNumber, customerName: item.customerName, wireId: item.wireType, cutLength: Number(item.lengthZ)}));
-            alert(`Autofilled cut details for Order #${item.orderNumber}`);
+            setFormData(prev => ({
+              ...prev,
+              orderNumber: normalizeOrderNumber(item.orderNumber),
+              customerName: normalizeId(item.customerName),
+              wireId: normalizeId(item.wireType),
+              cutLength: Number(item.lengthZ)
+            }));
+            alert(`Autofilled cut details for Order #${normalizeOrderNumber(item.orderNumber)}`);
             document.getElementById('recordsPage')?.scrollIntoView({ behavior: 'smooth' });
         }} />
 
@@ -156,8 +163,8 @@ const CuttingRecords: React.FC = () => {
            <div className="bg-white p-4 rounded-3xl shadow-xl space-y-4 border border-gray-100">
               <div className="grid grid-cols-1 gap-4">
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Number / IBT Number</label>
-                  <input value={formData.orderNumber} onChange={e => setFormData({...formData, orderNumber: e.target.value.replace(/[^A-Za-z0-9]/g, '').slice(0, 7).toUpperCase()})} className="input-premium w-full font-bold uppercase" maxLength={7} placeholder="1234567" disabled={formData.isSystemCut} />
+                  <label htmlFor="orderNumber" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Order Number / IBT Number</label>
+                  <input id="orderNumber" value={formData.orderNumber} onChange={e => setFormData({...formData, orderNumber: normalizeOrderNumber(e.target.value)})} className="input-premium w-full font-bold uppercase" maxLength={7} placeholder="1234567" disabled={formData.isSystemCut} />
                   <label className="inline-flex items-center mt-2 cursor-pointer">
                     <input type="checkbox" checked={batchMode} onChange={e => setBatchMode(e.target.checked)} className="form-checkbox h-4 w-4 text-blue-600 rounded" />
                     <span className="ml-2 text-[10px] font-bold header-gradient uppercase">Batch Entry Mode (Multiple Cuts)</span>
@@ -165,8 +172,8 @@ const CuttingRecords: React.FC = () => {
                 </div>
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Customer / Branch</label>
-                  <input value={formData.customerName} onChange={e => setFormData({...formData, customerName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EECOL BRANCH" disabled={formData.isSystemCut} />
+                  <label htmlFor="customerName" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Customer / Branch</label>
+                  <input id="customerName" value={formData.customerName} onChange={e => setFormData({...formData, customerName: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase" placeholder="EECOL BRANCH" disabled={formData.isSystemCut} />
                 </div>
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
@@ -176,16 +183,16 @@ const CuttingRecords: React.FC = () => {
 
                 {!batchMode && (
                   <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100 animate-entrance">
-                    <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Wire Type / ID</label>
-                    <input value={formData.wireId} onChange={e => setFormData({...formData, wireId: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="ACWU90 6/3 AL" />
+                    <label htmlFor="wireId" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Wire Type / ID</label>
+                    <input id="wireId" value={formData.wireId} onChange={e => setFormData({...formData, wireId: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase" placeholder="ACWU90 6/3 AL" />
                   </div>
                 )}
 
                 {!batchMode && <SingleCutForm formData={formData} setFormData={setFormData} onImportCalculator={() => setImportCalcOpen(true)} onImportReel={() => setImportReelOpen(true)} />}
 
                 <div className="p-3 bg-white rounded-2xl shadow-inner border border-gray-100">
-                  <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Cutter Name</label>
-                  <input value={formData.cutterName} onChange={e => setFormData({...formData, cutterName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="EMPLOYEE NAME" />
+                  <label htmlFor="cutterName" className="block text-[10px] font-bold mb-1 header-gradient uppercase">Cutter Name</label>
+                  <input id="cutterName" value={formData.cutterName} onChange={e => setFormData({...formData, cutterName: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase" placeholder="EMPLOYEE NAME" />
                 </div>
               </div>
 

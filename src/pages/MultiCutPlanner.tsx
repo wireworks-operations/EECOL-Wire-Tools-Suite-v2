@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDatabase } from '../hooks/useDatabase';
+import { useHistory } from './CuttingRecords/hooks/useHistory';
+import { normalizeId } from '../utils/stewardship';
 
 interface CutPlan {
   id: string;
@@ -11,16 +13,16 @@ interface CutPlan {
 
 const MultiCutPlanner: React.FC = () => {
   const { db, isReady } = useDatabase();
+  const { state: plans, setState: setPlans, undo, redo, canUndo, canRedo } = useHistory<CutPlan[]>([]);
   const [wireId, setWireId] = useState('');
   const [totalLength, setTotalLength] = useState(0);
   const [cuts, setCuts] = useState<{ id: string; length: number; orderNumber: string }[]>([]);
   const [newCutLength, setNewCutLength] = useState(0);
   const [newOrderNumber, setNewOrderNumber] = useState('');
-  const [plans, setPlans] = useState<CutPlan[]>([]);
 
   useEffect(() => {
     if (isReady && db) {
-      db.getAll<CutPlan>('multicutPlanner').then(setPlans);
+      db.getAll<CutPlan>('multicutPlanner').then(data => setPlans(data.sort((a,b) => b.timestamp - a.timestamp)));
     }
   }, [isReady, db]);
 
@@ -44,6 +46,27 @@ const MultiCutPlanner: React.FC = () => {
     setWireId('');
     setTotalLength(0);
     setCuts([]);
+    alert('Cut plan saved successfully!');
+  };
+
+  const deletePlan = async (id: string) => {
+    if (!db || !confirm('Delete this plan?')) return;
+    await db.delete('multicutPlanner', id);
+    setPlans(plans.filter(p => p.id !== id));
+  };
+
+  const handleUndo = async () => {
+    const prevState = undo();
+    if (prevState && db) {
+      await db.bulkPut('multicutPlanner', prevState, true);
+    }
+  };
+
+  const handleRedo = async () => {
+    const nextState = redo();
+    if (nextState && db) {
+      await db.bulkPut('multicutPlanner', nextState, true);
+    }
   };
 
   return (
@@ -55,18 +78,18 @@ const MultiCutPlanner: React.FC = () => {
           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl border border-eecol-blue/10 space-y-4">
             <h2 className="text-lg font-bold header-gradient uppercase">Reel Definition</h2>
             <div>
-              <label className="text-[10px] font-bold header-gradient uppercase block">Wire ID</label>
-              <input value={wireId} onChange={e => setWireId(e.target.value.toUpperCase())} className="input-premium w-full" placeholder="e.g. ACWU90 4/3" />
+              <label htmlFor="wireId" className="text-[10px] font-bold header-gradient uppercase block">Wire ID</label>
+              <input id="wireId" value={wireId} onChange={e => setWireId(normalizeId(e.target.value))} className="input-premium w-full" placeholder="e.g. ACWU90 4/3" />
             </div>
             <div>
-              <label className="text-[10px] font-bold header-gradient uppercase block">Total Reel Length (m)</label>
-              <input type="number" value={totalLength || ''} onChange={e => setTotalLength(parseFloat(e.target.value))} className="input-premium w-full" />
+              <label htmlFor="totalLength" className="text-[10px] font-bold header-gradient uppercase block">Total Reel Length (m)</label>
+              <input id="totalLength" type="number" value={totalLength || ''} onChange={e => setTotalLength(parseFloat(e.target.value))} className="input-premium w-full" />
             </div>
 
             <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
                <h3 className="text-sm font-bold header-gradient uppercase mb-2">Add New Cut</h3>
                <div className="flex gap-2">
-                 <input value={newOrderNumber} onChange={e => setNewOrderNumber(e.target.value.toUpperCase())} className="input-premium flex-1" placeholder="Order #" />
+                 <input value={newOrderNumber} onChange={e => setNewOrderNumber(normalizeId(e.target.value))} className="input-premium flex-1" placeholder="Order #" />
                  <input type="number" value={newCutLength || ''} onChange={e => setNewCutLength(parseFloat(e.target.value))} className="input-premium w-24" placeholder="Len" />
                  <button onClick={addCut} className="bg-eecol-blue text-white p-2 rounded-3xl">＋</button>
                </div>
@@ -94,7 +117,11 @@ const MultiCutPlanner: React.FC = () => {
                  <span>Remaining on Reel:</span>
                  <span>{remaining.toFixed(1)}m</span>
                </div>
-               <button onClick={savePlan} disabled={cuts.length === 0 || !wireId} className="w-full bg-eecol-blue text-white font-bold py-3 rounded-3xl uppercase btn-tactile disabled:opacity-50 mt-2">Save Plan</button>
+               <div className="flex gap-2 mt-2">
+                 <button onClick={handleUndo} disabled={!canUndo} className="flex-1 bg-gray-500 text-white font-bold py-3 rounded-3xl uppercase btn-tactile disabled:opacity-50 text-[10px]">↶ Undo</button>
+                 <button onClick={savePlan} disabled={cuts.length === 0 || !wireId} className="flex-[2] bg-eecol-blue text-white font-bold py-3 rounded-3xl uppercase btn-tactile disabled:opacity-50">Save Plan</button>
+                 <button onClick={handleRedo} disabled={!canRedo} className="flex-1 bg-gray-500 text-white font-bold py-3 rounded-3xl uppercase btn-tactile disabled:opacity-50 text-[10px]">Redo ↷</button>
+               </div>
             </div>
           </div>
         </div>
@@ -111,7 +138,7 @@ const MultiCutPlanner: React.FC = () => {
                  </div>
                  <div className="mt-3 pt-2 border-t border-gray-50 dark:border-slate-700 flex justify-between items-center">
                     <div className="text-[10px] font-bold text-eecol-blue uppercase">Total: {p.cuts.reduce((s,c) => s+c.length,0)}m / {p.totalReelLength}m</div>
-                    <button onClick={async () => {await db!.delete('multicutPlanner', p.id); setPlans(plans.filter(pl => pl.id !== p.id))}} className="text-[10px] text-red-500 font-bold uppercase hover:underline">Delete</button>
+                    <button onClick={() => deletePlan(p.id)} className="text-[10px] text-red-500 font-bold uppercase hover:underline">Delete</button>
                  </div>
                </div>
              ))}

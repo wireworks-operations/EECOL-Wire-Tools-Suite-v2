@@ -5,6 +5,7 @@ import InventoryItem from './components/InventoryItem';
 import InventoryStats from './components/InventoryStats';
 import { calculateInventoryStats } from './utils/logic';
 import { exportInventoryToCSV } from './utils/export';
+import { normalizeId } from '../../utils/stewardship';
 
 const InventoryRecords: React.FC = () => {
   const { db, isReady } = useDatabase();
@@ -52,11 +53,11 @@ const InventoryRecords: React.FC = () => {
       timestamp: editingId ? (items.find(i => i.id === editingId)?.timestamp || Date.now()) : Date.now(),
       createdAt: editingId ? (items.find(i => i.id === editingId)?.createdAt || Date.now()) : Date.now(),
       updatedAt: Date.now(),
-      productCode: formData.productCode?.toUpperCase() || '',
-      coilCode: formData.coilCode?.toUpperCase() || '',
-      personName: formData.personName?.toUpperCase() || '',
-      lineCode: formData.lineCode?.toUpperCase() || '',
-      name: formData.productCode // Mapping for legacy
+      productCode: normalizeId(formData.productCode),
+      coilCode: normalizeId(formData.coilCode),
+      personName: normalizeId(formData.personName),
+      lineCode: normalizeId(formData.lineCode),
+      name: normalizeId(formData.productCode) // Mapping for legacy
     };
 
     await db.put('inventoryRecords', item);
@@ -169,7 +170,7 @@ const InventoryRecords: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Inspected By</label>
-                        <input value={formData.personName} onChange={e => setFormData({...formData, personName: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase" placeholder="ENTER NAME" />
+                        <input value={formData.personName} onChange={e => setFormData({...formData, personName: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase" placeholder="ENTER NAME" />
                     </div>
                 </div>
             </div>
@@ -195,11 +196,11 @@ const InventoryRecords: React.FC = () => {
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Product Code</label>
-                        <input value={formData.productCode} onChange={e => setFormData({...formData, productCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase text-xs" placeholder="PRODUCT CODE" />
+                        <input value={formData.productCode} onChange={e => setFormData({...formData, productCode: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase text-xs" placeholder="PRODUCT CODE" />
                     </div>
                     <div>
                         <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Coil Code</label>
-                        <input value={formData.coilCode} onChange={e => setFormData({...formData, coilCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase text-xs" placeholder="A,B,Z..." maxLength={1} />
+                        <input value={formData.coilCode} onChange={e => setFormData({...formData, coilCode: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase text-xs" placeholder="A,B,Z..." maxLength={1} />
                     </div>
                 </div>
             </div>
@@ -238,7 +239,7 @@ const InventoryRecords: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                         <label className="block text-[10px] font-bold mb-1 header-gradient uppercase">Line #</label>
-                        <input value={formData.lineCode} onChange={e => setFormData({...formData, lineCode: e.target.value.toUpperCase()})} className="input-premium w-full font-bold uppercase text-xs" placeholder="003 OR A" maxLength={3} />
+                        <input value={formData.lineCode} onChange={e => setFormData({...formData, lineCode: normalizeId(e.target.value)})} className="input-premium w-full font-bold uppercase text-xs" placeholder="003 OR A" maxLength={3} />
                     </div>
                     <div className="flex flex-wrap gap-4 items-center justify-center">
                         {[
