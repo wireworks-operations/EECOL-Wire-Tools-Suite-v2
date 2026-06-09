@@ -116,7 +116,7 @@ const Home: React.FC = () => {
         <ToolCard to="/reel-capacity" icon="🔄" title="Reel Capacity Estimator" description="Calculate maximum wire capacity." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-700" />
         <ToolCard to="/reel-size" icon="📐" title="Reel Size Estimator" description="Find optimal reel for wire length." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-700" />
         <ToolCard to="/weight" icon="⚖️" title="Weight Calculator" description="Estimate wire weight by length." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-800" />
-        <ToolCard to="/multicut-planner" icon="✂️" title="Multi-Cut Planner" description="Plan multiple reel cuts & capacity." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-800" disabled />
+        <ToolCard to="/multicut-planner" icon="✂️" title="Multi-Cut Planner" description="Plan multiple reel cuts & capacity." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-800" />
         <ToolCard to="/shipping-manifest" icon="📋" title="Shipping Manifest" description="Create reel labels for shipping." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-900" />
         <ToolCard to="/reel-labels" icon="🏷️" title="Reel Inventory Labels" description="Simple large-format reel identification." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-900" />
         <ToolCard to="/maintenance" icon="🔧" title="Machine Maintenance" description="Daily equipment inspection checklists." colSpan="col-span-2" rowSpan="row-span-1" delay="delay-1000" />
